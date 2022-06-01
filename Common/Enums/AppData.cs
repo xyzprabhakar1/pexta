@@ -18,6 +18,9 @@ namespace Common.Enums
     public enum enmForms
     {
     }
+    public enum enmClaim
+    { 
+    }
 
 
 }

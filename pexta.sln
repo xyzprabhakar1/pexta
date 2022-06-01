@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pexta", "pexta\pexta.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{A861E6AC-8B19-4BB6-B072-4B0ACC0ECD8C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRMS", "HRMS\HRMS.csproj", "{0C3B2288-76EF-4819-AB4B-8BFC3FE78BCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A861E6AC-8B19-4BB6-B072-4B0ACC0ECD8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A861E6AC-8B19-4BB6-B072-4B0ACC0ECD8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A861E6AC-8B19-4BB6-B072-4B0ACC0ECD8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C3B2288-76EF-4819-AB4B-8BFC3FE78BCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C3B2288-76EF-4819-AB4B-8BFC3FE78BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C3B2288-76EF-4819-AB4B-8BFC3FE78BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C3B2288-76EF-4819-AB4B-8BFC3FE78BCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
