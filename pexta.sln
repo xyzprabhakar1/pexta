@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pexta", "pexta\pexta.csproj", "{4C64E959-AF73-4BC7-A4E7-C0CE9632CCFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pexta", "pexta\pexta.csproj", "{4C64E959-AF73-4BC7-A4E7-C0CE9632CCFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{A861E6AC-8B19-4BB6-B072-4B0ACC0ECD8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4C64E959-AF73-4BC7-A4E7-C0CE9632CCFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C64E959-AF73-4BC7-A4E7-C0CE9632CCFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C64E959-AF73-4BC7-A4E7-C0CE9632CCFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A861E6AC-8B19-4BB6-B072-4B0ACC0ECD8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A861E6AC-8B19-4BB6-B072-4B0ACC0ECD8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A861E6AC-8B19-4BB6-B072-4B0ACC0ECD8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A861E6AC-8B19-4BB6-B072-4B0ACC0ECD8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
