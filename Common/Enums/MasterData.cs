@@ -43,4 +43,12 @@ namespace Common.Enums
         FilePDF = 9
     }
 
+    public enum enmUserType
+    {
+        SuperAdmin = 1,
+        Employee = 2,
+        Customer = 4,
+        Vendor = 8,
+    }
+
 }
