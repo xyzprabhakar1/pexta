@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Common.Database;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HRMS.Database
 {
-    public class tblHolidayMaster :  d_ModifiedBy
+    public class tblHolidayMaster :  d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,7 +17,7 @@ namespace HRMS.Database
         
     }
 
-    public class tblDepartment : d_ModifiedBy
+    public class tblDepartment : d_Modified
     {
         
         [Key]
@@ -29,7 +30,7 @@ namespace HRMS.Database
         public bool IsActive { get; set; }        
     }
 
-    public class tblDepartWorkingRole : d_ModifiedBy
+    public class tblDepartWorkingRole : d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -43,7 +44,7 @@ namespace HRMS.Database
         public int OrgId { get; set; }
     }
 
-    public class tblGrade : d_ModifiedBy
+    public class tblGrade : d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -54,7 +55,7 @@ namespace HRMS.Database
         public bool IsActive { get; set; }
         public int OrgId { get; set; }
     }
-    public class tblDesignation : d_ModifiedBy
+    public class tblDesignation : d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -65,7 +66,7 @@ namespace HRMS.Database
         public bool IsActive { get; set; }
         public int OrgId { get; set; }
     }
-    public class tblReligionMaster : d_ModifiedBy
+    public class tblReligionMaster : d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
