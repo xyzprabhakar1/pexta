@@ -322,6 +322,7 @@ namespace Common.Enums
         public bool HaveReport { get { return DocumentType.HasFlag(enmDocumentType.Report); } }
         public bool PendingReport { get { return DocumentType.HasFlag(enmDocumentType.PendingReport); } }
         public bool HaveDisplayMenu { get { return DocumentType.HasFlag(enmDocumentType.DisplayMenu); } }
+        public bool HaveDetailView { get { return DocumentType.HasFlag(enmDocumentType.DetailView); } }
     }
 
 

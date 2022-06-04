@@ -99,6 +99,7 @@ namespace Common.Database
         public tblUsersMaster tblUsersMaster { get; set; }
         public enmDocumentMaster DocumentMaster { get; set; }
         public enmDocumentType PermissionType { get; set; }
+        public string PermissionType { get; set; }
     }
 
     public class tblUserOTP

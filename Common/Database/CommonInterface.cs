@@ -68,6 +68,7 @@ namespace Common.Database
 
     public class d_Contact_With_Address
     {
+
         [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
         [MaxLength(254)]
         public string OfficeAddress { get; set; }=String.Empty;
@@ -99,5 +100,64 @@ namespace Common.Database
         [MaxLength(16)]
         [DataType(DataType.PhoneNumber)]
         public string AlternateContactNo { get; set; } = String.Empty;        
+    }
+
+
+    public class d_Address
+    {
+        
+        public int AddressId { get; set; }
+        public enmContactType ContactType { get; set; }
+        [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
+        [MaxLength(254)]
+        public string Address1 { get; set; } = String.Empty;
+        [MaxLength(254)]
+        [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
+        public string Address2 { get; set; } = String.Empty;
+        [MaxLength(254)]
+        [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
+        public string City { get; set; } = String.Empty;
+        [MaxLength(32)]
+        [DataType(DataType.PostalCode)]
+        [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
+        public string Pincode { get; set; } = String.Empty;
+        public int StateId { get; set; }
+        public int CountryId { get; set; }
+        [NotMapped]
+        public string StateName { get; set; } = String.Empty;
+        [NotMapped]
+        public string CountryName { get; set; } = String.Empty;
+    }
+
+    public class d_ContactDetails
+    { 
+        public int ContactId { get; set; }
+        public enmContactType ContactType { get; set; }
+        [MaxLength(254)]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }      
+        [MaxLength(16)]
+        [DataType(DataType.PhoneNumber)]
+        public string ContactNo { get; set; } 
+    }
+    public class d_BasicDetails
+    {
+        public int Id { get; set; }
+        [Required]
+        [MaxLength(30)]
+        public string Code { get; set; }
+        [Required]
+        [MaxLength(30)]
+        public string FirstName { get; set; }
+        [MaxLength(30)]
+        public string MiddleName { get; set; }
+        [MaxLength(30)]
+        [Required]
+        public string LastName { get; set; }
+        public enmGender Gender { get; set; }
+        [MaxLength(90)]
+        public string FatherName { get; set; }
+        public DateTime Dob { get; set; }
+        public bool IsActive { get; set; }        
     }
 }

@@ -50,5 +50,72 @@ namespace Common.Enums
         Customer = 4,
         Vendor = 8,
     }
+    public enum enmGender
+    {
+        None = 0,
+        Male = 1,
+        Female = 2,
+        Other=3        
+    }
+    public enum enmTitle
+    {
+        None = 0,
+        MR = 1,
+        MRS = 2,
+        MISS = 3,
+        MASTER = 4
+    }
+    public enum enmContactType
+    {
+        Official=1,
+        Primary = 2,
+        Corresponding = 3,
+        Emergency = 4,
+    }
+    public enum enmReligion
+    {
+        Christianity = 1,
+        Islam = 2,
+        Hinduism = 3,
+        Buddhism = 4,
+        Atheism = 5,
+        Baháí = 6,
+        Confucianism = 7,
+        Druze = 8,
+        Gnosticism = 9,
+        Jainism = 10,
+        Judaism = 11,
+        Rastafarianism = 12,
+        Shinto = 13,
+        Sikhism = 14,
+        Zoroastrianism = 15,
+        TraditionalAfrican = 16,
+        AfricanDiaspora = 17,
+        IndigenousAmerican = 18,
+        Other = 101
+    }
+    public enum enmMaritalStatus
+    {
+        Single = 1,
+        Married = 2,
+        Widowed = 3,
+        Divorced = 4,
+        Other = 101
+    }
+
+    public enum enmFamily
+    {
+        Father = 1,
+        Mother = 2,
+        Husband = 3,
+        Wife = 4,
+        Son = 5,
+        Daughter = 6,
+        GrandMother = 7,
+        GrandFather = 8,
+        Brother = 9,
+        Sister = 10,
+        Other = 101
+    }
 
 }
