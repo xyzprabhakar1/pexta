@@ -2,6 +2,7 @@
 using Common.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using HRMS.classes;
 
 namespace HRMS.Database
 {
@@ -566,16 +567,15 @@ namespace HRMS.Database
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        [ForeignKey("tblEmployeeMaster")] 
         public int? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
-        [ForeignKey("tblEmpFamilyDetails")] // Foreign Key here        
+        [ForeignKey("tblEmpFamilyDetails")] 
         public int? FamilyDetailId { get; set; }
         public tblEmpFamilyDetails tblEmpFamilyDetails { get; set; }
-        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
+        [ForeignKey("tblEmployeeMaster_log")] 
         public int? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
-
         public DateTime RequestedDt { get; set; }
         public int RequestedBy { get; set; }
         [MaxLength(256)]
@@ -586,7 +586,73 @@ namespace HRMS.Database
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
         public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+    }
 
+    public class tblEmpQualification
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int QualificationId { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        public enmQualification QualificationType { get; set; }
+        [MaxLength(32)]
+        public string CourseTitle { get; set; }
+        [MaxLength(32)]
+        public string Specialization { get; set; }
+        [MaxLength(128)]
+        public string University { get; set; }//University or Board
+        [MaxLength(128)]
+        public string College { get; set; }
+        public enmMonth DurationStartMonth { get; set; }
+        public Int16 DurationStartYear { get; set; }
+        public enmMonth DurationEndMonth { get; set; }
+        public Int16 DurationEndYear { get; set; }
+        public enmCourseType CourseType { get; set; }
+        public double Percentage { get; set; }
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
+    }
+
+    public class tblEmpQualification_log
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int QualificationId { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
+        public enmQualification QualificationType { get; set; }
+        [MaxLength(32)]
+        public string CourseTitle { get; set; }
+        [MaxLength(32)]
+        public string Specialization { get; set; }
+        [MaxLength(128)]
+        public string University { get; set; }//University or Board
+        [MaxLength(128)]
+        public string College { get; set; }
+        public enmMonth DurationStartMonth { get; set; }
+        public Int16 DurationStartYear { get; set; }
+        public enmMonth DurationEndMonth { get; set; }
+        public Int16 DurationEndYear { get; set; }
+        public enmCourseType CourseType { get; set; }
+        public double Percentage { get; set; }
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
     }
 
 }
