@@ -139,12 +139,14 @@ namespace HRMS.Database
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
 
-
     public class tblEmpDepartment_log
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmpDepId { get; set; }
+        public int  Id{ get; set; }
+        [ForeignKey("tblEmpDepartment")] // Foreign Key here        
+        public int? EmpDepId { get; set; }
+        public tblEmpDepartment tblEmpDepartment { get; set; }        
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
         public int? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
@@ -159,113 +161,432 @@ namespace HRMS.Database
         public tblDepartWorkingRole tblDepartWorkingRole { get; set; }
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; } = DateTime.Now;
-        
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+
     }
 
-    public class OfficialDetails : IActive, ICreatedBy, IModifiedBy
+
+    public class tblEmpLocation
     {
-        public int OfficialDetailId { get; set; }
-        public int? PartyId { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int EmpLocationId { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public int? CompanyId { get; set; }
         public int? ZoneId { get; set; }
         public int? LocationId { get; set; }
-        public int? SubLocationId { get; set; }
-        public int? DepartmentId { get; set; }
-        public int? SubDepartmentId { get; set; }
-        public DateTime JoiningDt { get; set; }
+        [NotMapped]
+        public string CompanyName { get; set; }
+        [NotMapped]
+        public string ZoneName { get; set; }
+        [NotMapped]
+        public string LocationName { get; set; }
         public bool IsActive { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime EffectiveDt { get; set; } = DateTime.Now;
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
     }
 
-    public class PersonalDetails : IActive, ICreatedBy, IModifiedBy
+    public class tblEmpLocation_log
     {
-        public int PersonalDetailId { get; set; }
-        public int? PartyId { get; set; }
-        public enmReligion Religion { get; set; }
-        [MaxLength(90)]
-        public string MotherName { get; set; }
-        public enmMaritalStatus MaritalStatus { get; set; }
-        public DateTime AnniversaryDate { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [ForeignKey("tblEmpLocation")] // Foreign Key here        
+        public int? EmpLocationId { get; set; }
+        public tblEmpLocation tblEmpLocation { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
+        public int? CompanyId { get; set; }
+        public int? ZoneId { get; set; }
+        public int? LocationId { get; set; }
+        [NotMapped]
+        public string CompanyName { get; set; }
+        [NotMapped]
+        public string ZoneName { get; set; }
+        [NotMapped]
+        public string LocationName { get; set; }
         public bool IsActive { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime EffectiveDt { get; set; } = DateTime.Now;
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+
     }
 
-    public class BankDetails : IActive, ICreatedBy, IModifiedBy
+
+    public class tblEmpDesignation
     {
-        public int BankDetailId { get; set; }
-        public int? PartyId { get; set; }
-        public int? BankId { get; set; }
-        public string BranchCode { get; set; }
-        public string BranchName { get; set; }
-        public string AccountNumber { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int EmpDesId { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblDesignation")] // Foreign Key here        
+        public int? DesId { get; set; }
+        public tblDesignation tblDesignation { get; set; }
+        [ForeignKey("tblGrade")] // Foreign Key here        
+        public int? GradeId { get; set; }
+        public tblGrade tblGrade { get; set; }
+
         public bool IsActive { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime EffectiveDt { get; set; } = DateTime.Now;
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
     }
 
-    public class TaxationDetails : IActive, ICreatedBy, IModifiedBy
+    public class tblEmpDesignation_log
     {
-        public int TaxationDetailId { get; set; }
-        public int? PartyId { get; set; }
-        public string TaxationNumber { get; set; }
-        public string TaxationName { get; set; }
-        public int? RegistrationStateId { get; set; }
-        public int? RegistrationCountryId { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [ForeignKey("tblEmpDesignation")] // Foreign Key here        
+        public int? EmpDesId { get; set; }
+        public tblEmpDesignation tblEmpDesignation { get; set; }        
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblDesignation")] // Foreign Key here        
+        public int? DesId { get; set; }
+        public tblDesignation tblDesignation { get; set; }
+        [ForeignKey("tblGrade")] // Foreign Key here        
+        public int? GradeId { get; set; }
+        public tblGrade tblGrade { get; set; }
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         public bool IsActive { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime EffectiveDt { get; set; } = DateTime.Now;
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+
     }
 
-    public class ProfilePic : IActive, ICreatedBy, IModifiedBy
+    public class tblEmpManager
     {
-        public int TaxationDetailId { get; set; }
-        public int? PartyId { get; set; }
-        public Guid DocId { get; set; }
-        public string Path { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }        
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmployeeMaster_Mgr")] // Foreign Key here        
+        public int? ManagerId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster_Mgr { get; set; }
         public bool IsActive { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime EffectiveDt { get; set; } = DateTime.Now;
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
     }
 
-    public class FamilyDetails : IActive, ICreatedBy, IModifiedBy
+    public class tblEmpManager_log
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmployeeMaster_Mgr")] // Foreign Key here        
+        public int? ManagerId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster_Mgr { get; set; }
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime EffectiveDt { get; set; } = DateTime.Now;
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+    }
+
+
+    public class tblEmpOfficialDetails : OfficialDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public new int OfficialDetailId { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }                        
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
+    }
+    public class tblEmpOfficialDetails_Log : OfficialDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public new int Id { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
+        [ForeignKey("tblEmpOfficialDetails")] // Foreign Key here        
+        public new int? OfficialDetailId { get; set; }
+        public tblEmpOfficialDetails tblEmpOfficialDetails { get; set; }
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+
+    }
+
+
+    public class tblEmpPersonalDetails : PersonalDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public new int PersonalDetailId { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
+
+    }
+    public class tblEmpPersonalDetails_Log : PersonalDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public new int Id { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
+        [ForeignKey("tblEmpPersonalDetails")] // Foreign Key here        
+        public new int? PersonalDetailId { get; set; }
+        public tblEmpPersonalDetails tblEmpPersonalDetails { get; set; }
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+    }
+
+    public class tblEmpDocument : DocumentDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public new int DocumentDetailId { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
+    }
+
+    public class tblEmpDocument_Log : DocumentDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
+        [ForeignKey("tblEmpDocument")] // Foreign Key here        
+        public new int? DocumentDetailId { get; set; }
+        public tblEmpDocument tblEmpDocument { get; set; }
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+    }
+
+    public class tblEmpBankDetails :BankDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public new int BankDetailId { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmpDocument")] // Foreign Key here        
+        public int? DocumentId { get; set; }
+        public tblEmpDocument tblEmpDocument { get; set; }        
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
+    }
+
+    public class tblEmpBankDetails_Log : BankDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmpDocument")] // Foreign Key here        
+        public int? DocumentId { get; set; }
+        public tblEmpDocument tblEmpDocument { get; set; }
+
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
+        [ForeignKey("tblEmpDocument_Log")] // Foreign Key here        
+        public int? DocumentLogId { get; set; }
+        public tblEmpDocument_Log tblEmpDocument_Log { get; set; }
+
+        [ForeignKey("tblEmpBankDetails")] // Foreign Key here        
+        public new int? BankDetailId { get; set; }
+        public tblEmpBankDetails tblEmpBankDetails { get; set; }
+
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+    }
+
+    //public class TaxationDetails : IActive, ICreatedBy, IModifiedBy
+    //{
+    //    public int TaxationDetailId { get; set; }
+    //    public int? PartyId { get; set; }
+    //    public string TaxationNumber { get; set; }
+    //    public string TaxationName { get; set; }
+    //    public int? RegistrationStateId { get; set; }
+    //    public int? RegistrationCountryId { get; set; }
+    //    public bool IsActive { get; set; }
+    //    public int CreatedBy { get; set; }
+    //    public DateTime CreatedDate { get; set; }
+    //    public int ModifiedBy { get; set; }
+    //    public DateTime ModifiedDate { get; set; }
+    //}
+
+    //public class ProfilePic : IActive, ICreatedBy, IModifiedBy
+    //{
+    //    public int TaxationDetailId { get; set; }
+    //    public int? PartyId { get; set; }
+    //    public Guid DocId { get; set; }
+    //    public string Path { get; set; }
+    //    public bool IsActive { get; set; }
+    //    public int CreatedBy { get; set; }
+    //    public DateTime CreatedDate { get; set; }
+    //    public int ModifiedBy { get; set; }
+    //    public DateTime ModifiedDate { get; set; }
+    //}
+
+    public class tblEmpFamilyDetails: FamilyDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int FamilyDetailId { get; set; }
-        public int? PartyId { get; set; }
-        public enmFamily enmFamily { get; set; }
-        public string RelationName { get; set; }
-        public string Name { get; set; }
-        public DateTime Dob { get; set; }
-        public bool IsActive { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
+
     }
 
-    public class PartyDocumentDetails : IActive, ICreatedBy, IModifiedBy
+    public class tblEmpFamilyDetails_log : FamilyDetails
     {
-        public int DocumentDetailId { get; set; }
-        public int? PartyId { get; set; }
-        public int? DocumentTypeId { get; set; }
-        public string DocumentNo { get; set; }
-        public string DocumentDetails { get; set; }
-        public enmDocumentExtension DocumentExtension { get; set; }
-        public bool IsActive { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmpFamilyDetails")] // Foreign Key here        
+        public int? FamilyDetailId { get; set; }
+        public tblEmpFamilyDetails tblEmpFamilyDetails { get; set; }
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
+
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+
     }
+
 }

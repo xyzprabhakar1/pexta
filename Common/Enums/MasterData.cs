@@ -96,6 +96,7 @@ namespace Common.Enums
     }
     public enum enmMaritalStatus
     {
+        None=0,
         Single = 1,
         Married = 2,
         Widowed = 3,
@@ -105,6 +106,7 @@ namespace Common.Enums
 
     public enum enmFamily
     {
+        None=0,
         Father = 1,
         Mother = 2,
         Husband = 3,
@@ -116,6 +118,40 @@ namespace Common.Enums
         Brother = 9,
         Sister = 10,
         Other = 101
+    }
+    public enum enmBloodGroup
+    {
+        None=0,
+        A_plus=11,
+        B_plus = 12,
+        AB_plus = 13,
+        O_plus = 14,
+        A_minus = 21,
+        B_minus = 22,
+        AB_minus = 23,
+        O_minus = 24,
+    }
+
+    public enum enmUploadDocumentType
+    {
+        None=0,
+        Pan=1,
+        Bank=2,
+        Adhar=3,
+        DrivingLicence=4,
+        VoterCard = 5,
+        IDProof=10,
+        AddressDetails = 11,
+        ElectricityBill = 12,
+        WaterBill = 13,
+        GasBill = 13,
+        EducationDetails=20,
+        Secondary =21,
+        SrSecondary= 22,
+        Diploma = 23,
+        Gradutation = 24,
+        PostGradutation = 25,
+        Doctrate = 26,
     }
 
 }

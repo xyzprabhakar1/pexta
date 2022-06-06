@@ -143,6 +143,7 @@ namespace Common.Database
     public class d_BasicDetails
     {
         public int Id { get; set; }
+        public enmTitle Title { get; set; }
         [Required]
         [MaxLength(30)]
         public string Code { get; set; }
@@ -158,6 +159,107 @@ namespace Common.Database
         [MaxLength(90)]
         public string FatherName { get; set; }
         public DateTime Dob { get; set; }
+        public bool IsActive { get; set; }        
+    }
+    public class OfficialDetails
+    {
+        
+        public int OfficialDetailId { get; set; }
+        public DateTime OrgJoiningDt { get; set; }
+        public DateTime ComJoiningDt { get; set; }
+        public DateTime? TerminationDt { get; set; }
+        public int DefaultProbationPeriodMonth { get; set; }
+        public int DefaultProbationPeriodDay { get; set; }
+        public int DefaultNoticePeriodMonth { get; set; }
+        public int DefaultNoticePeriodDay { get; set; }
+        public int ActualProbationPeriodMonth { get; set; }
+        public int ActualProbationPeriodDay { get; set; }
+        public int ActualNoticePeriodMonth { get; set; }
+        public int ActualNoticePeriodDay { get; set; }
+        [MaxLength(32)]
+        public string PanNo{ get; set; }
+        [MaxLength(256)]
+        public string PanName { get; set; }
+        [MaxLength(32)]
+        public string AdharNo{ get; set; }
+        [MaxLength(64)]
+        public string hr_spoc { get; set; }
+        [MaxLength(256)]
+        public string JoiningRemarks { get; set; }
+        [MaxLength(256)]
+        public string TerminationRemarks { get; set; }
+        
+    }
+
+    public class PersonalDetails
+    {
+        public int PersonalDetailId { get; set; }
+        [MaxLength(32)]
+        public string Nationality { get; set; }
+        public enmReligion Religion { get; set; }
+        [MaxLength(128)]
+        public string MotherName { get; set; }
+        public enmMaritalStatus MaritalStatus { get; set; }
+        public enmBloodGroup BloodGroup { get; set; }
+        public DateTime AnniversaryDate { get; set; }     
+    }
+    public class DocumentDetails 
+    {
+        public int DocumentDetailId { get; set; }
+        public enmUploadDocumentType DocumentType { get; set; }
+        [MaxLength(128)]
+        public string DocumentNo { get; set; }
+        [MaxLength(512)]
+        public string Details { get; set; }
+        public DateTime? IssueDate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
+        [MaxLength(512)]
+        public string DocumentPaths { get; set; }
+        public enmFileType FileType { get; set; }
+        public bool IsActive { get; set; }
+    }
+
+    public class BankDetails 
+    {
+        public int BankDetailId { get; set; }        
+        public int? BankId { get; set; }
+        [MaxLength(32)]
+        public string BranchCode { get; set; }
+        [MaxLength(64)]
+        public string BranchName { get; set; }
+        [MaxLength(32)]
+        public string AccountNumber { get; set; }
+        [MaxLength(64)]
+        public string UPI { get; set; }
+        [MaxLength(64)]
+        public string NameonBank { get; set; }
+        [NotMapped]
+        public int BankName { get; set; }
+        public bool IsActive { get; set; }
+
+    }
+    public class FamilyDetails
+    {
+        public int FamilyDetailId { get; set; }        
+        public enmFamily enmFamily { get; set; }
+        [MaxLength(32)]
+        public string RelationName { get; set; }
+        [MaxLength(64)]
+        public string Name { get; set; }
+        public DateTime Dob { get; set; }
+        [MaxLength(64)]
+        public string IDProofType { get; set; }
+        [MaxLength(64)]
+        public string IDProofNo { get; set; }
+        [MaxLength(64)]
+        public string Occupation { get; set; }
+        [MaxLength(24)]
+        public string ContactNo { get; set; }
+        [MaxLength(128)]
+        public string Email { get; set; }
+        public bool IsNominee { get; set; }
+        public double NomineePercentage { get; set; }
+        public bool IsDependent { get; set; }
         public bool IsActive { get; set; }        
     }
 }
