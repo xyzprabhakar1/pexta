@@ -353,6 +353,8 @@ namespace HRMS.Database
         public new int OfficialDetailId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
         public int? EmpId { get; set; }
+        [MaxLength(32)]
+        public string CardNo { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }                        
         public DateTime? ModifiedDt { get; set; }
         public int? ModifiedBy { get; set; }
@@ -373,6 +375,8 @@ namespace HRMS.Database
         [ForeignKey("tblEmpOfficialDetails")] // Foreign Key here        
         public new int? OfficialDetailId { get; set; }
         public tblEmpOfficialDetails tblEmpOfficialDetails { get; set; }
+        [MaxLength(32)]
+        public string CardNo { get; set; }
         public DateTime RequestedDt { get; set; }
         public int RequestedBy { get; set; }
         [MaxLength(256)]
@@ -655,4 +659,70 @@ namespace HRMS.Database
         public enmEntityType EntityType { get; set; } = enmEntityType.Create;
     }
 
+
+    public class tblEmpWorkExperience
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int WorkExperienceId { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [MaxLength(256)]
+        public string CompanyName { get; set; }
+        [MaxLength(256)]
+        public string Address { get; set; }
+        [MaxLength(32)]
+        public string Designation { get; set; }
+        public  DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        [MaxLength(32)]
+        public string EmployeeCode{ get; set; }
+        public double AnnualSalary { get; set; }
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
+    }
+
+    public class tblEmpWorkExperience_Log
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
+        public int? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
+        [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
+        public int? EmpLogId { get; set; }
+        public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
+        [ForeignKey("tblEmpWorkExperience")] // Foreign Key here        
+        public int? WorkExperienceId { get; set; }
+        public tblEmpWorkExperience tblEmpWorkExperience { get; set; }
+        [MaxLength(256)]
+        public string CompanyName { get; set; }
+        [MaxLength(256)]
+        public string Address { get; set; }
+        [MaxLength(32)]
+        public string Designation { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        [MaxLength(32)]
+        public string EmployeeCode { get; set; }
+        public double AnnualSalary { get; set; }
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
+        public DateTime RequestedDt { get; set; }
+        public int RequestedBy { get; set; }
+        [MaxLength(256)]
+        public string RequestedRemarks { get; set; } = string.Empty;
+        public DateTime? ApprovalDt { get; set; }
+        public int? ApprovalBy { get; set; }
+        [MaxLength(256)]
+        public string ApprovalRemarks { get; set; } = string.Empty;
+        public enmApprovalStatus ApprovalStatus { get; set; }
+        public enmEntityType EntityType { get; set; } = enmEntityType.Create;
+    }
 }

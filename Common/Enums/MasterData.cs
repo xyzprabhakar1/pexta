@@ -169,11 +169,30 @@ namespace Common.Enums
         Nov=11, 
         Dec=12
     }
-    public enum enmCourseType
+
+    public enum enmWeekOff :byte
+    {
+        First=1,
+        Second=2,
+        Third=4,
+        Fourth=8,
+        Fifth=16,
+    }
+    public enum enmCourseType : byte
     {
         FullTime = 1,
         PartTime = 2,
         Correspondance =3
+    }
+
+    public enum enmFrequence:byte
+    { 
+        None=0,
+        Daily=1,
+        Monthly=2,
+        Quaterly = 3,
+        HalfYearly = 4,
+        Yearly = 4,
     }
 
 }

@@ -38,8 +38,28 @@
         OtherDiploma=6,
         Doctrate=7,
         Other = 8,
+    }
 
+    public enum enmLeaveType :byte
+    {
+        Other=0,
+        EarnedLeave=1,
+        CasualLeave=2,
+        SickLeave=3,
+        MaternityLeave=4,
+        CompensatoryOff=5,
+        MarriageLeave=6,
+        PaternityLeave=7,
+        BereavementLeave=8,
+        LeaveWithoutPay=10,//Loss of Pay (LOP) / Leave Without Pay (LWP)
+    }
 
+    public enum enmPunchType : byte
+    {
+        None=0,
+        SinglePunchPresent=1,
+        SinglePunchAbsent = 2,
+        PunchExempted = 2,
 
     }
 }
