@@ -20,6 +20,7 @@ namespace HRMS.Database
         public tblOverTimeMaster tblOverTimeMaster { get; set; }
         public bool IsCompoffApplicable { get; set; }
         public bool IsRosterApplicable { get; set; }
+        public byte RosterWeekOff { get; set; }
         public bool IsMobilePunchApplicable { get; set; }
         public bool IsGraceTimeAllowed { get; set; }
         public int MaxGraceTimeMinute { get; set; }
@@ -49,7 +50,6 @@ namespace HRMS.Database
         public int? LeaveId { get; set; }
         public tblLeaveMaster tblLeaveMaster { get; set; }
     }
-
     public class tblAttendanceGroupHoliday
     {
         [Key]

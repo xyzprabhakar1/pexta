@@ -46,4 +46,6 @@ namespace HRMS.Database
         public int? HolidayId { get; set; }
         public tblHolidayMaster tblHolidayMaster { get; set; }
     }
+
+
 }

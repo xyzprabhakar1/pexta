@@ -78,4 +78,29 @@ namespace HRMS.Database
         public int OrgId { get; set; }
     }
 
+    public class tblMachineMaster : d_Modified
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int MachineId { get; set; }
+        [MaxLength(64)]
+        public string Name { get; set; }
+        [MaxLength(64)]
+        public string IPAddress { get; set; }
+        public ushort Port { get; set; }
+        [MaxLength(64)]
+        public string Password { get; set;}
+        public int? LocationId { get; set; }
+        public int? SubLocationId { get; set; }
+        [NotMapped]        
+        public string LocationName { get; set; }
+        [NotMapped]
+        public string CompanyName { get; set; }
+        [NotMapped]
+        public string ZoneName { get; set; }
+        [NotMapped]
+        public string SubLocationName { get; set; }
+        public bool IsActive { get; set; }
+    }
+
 }

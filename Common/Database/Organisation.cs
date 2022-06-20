@@ -185,7 +185,7 @@ namespace Common.Database
         public int? OrgId { get; set; }
         public tblOrganisation tblOrganisation { get; set; }
     }
-
+    
     public class tblLocationMaster :_tblLocationMaster 
     {
         [Key]
@@ -216,4 +216,20 @@ namespace Common.Database
         public enmApprovalStatus ApprovalStatus { get; set; }
         public enmEntityType EntityType { get; set; } = enmEntityType.Create;
     }
+
+
+    public class tblSubLocationMaster 
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int SubLocationId { get; set; }
+        [MaxLength(254)]
+        public string Name { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime? ModifiedDt { get; set; }
+        public int? ModifiedBy { get; set; }
+        [MaxLength(256)]
+        public string ModifiedRemarks { get; set; } = string.Empty;
+    }
+    
 }

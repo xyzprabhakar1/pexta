@@ -218,12 +218,15 @@ namespace HRMS.Database
         public int? CompanyId { get; set; }
         public int? ZoneId { get; set; }
         public int? LocationId { get; set; }
+        public int? SubLocationId { get; set; }
         [NotMapped]
         public string CompanyName { get; set; }
         [NotMapped]
         public string ZoneName { get; set; }
         [NotMapped]
         public string LocationName { get; set; }
+        [NotMapped]
+        public string SubLocationName { get; set; }
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; } = DateTime.Now;
         public DateTime RequestedDt { get; set; }
