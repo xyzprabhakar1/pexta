@@ -11,7 +11,7 @@ namespace HRMS.Database
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AttendanceGroupId { get; set; }
         [MaxLength(64)]
-        public string Name { get; set; }
+        protected string Name { get; set; }
         public enmPunchType PunchType { get; set; }
         public bool IsSandwichApplicable { get; set; }
         public bool IsOverTimeApplicable { get; set; }
@@ -30,6 +30,7 @@ namespace HRMS.Database
         [ForeignKey("tblWeekoffMaster")]
         public int? Weekoff { get; set; }
         public tblWeekoffMaster tblWeekoffMaster { get; set; }
+        protected bool IsDefault { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime? ModifiedDt { get; set; }
         public int? ModifiedBy { get; set; }
