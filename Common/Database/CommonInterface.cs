@@ -66,6 +66,14 @@ namespace Common.Database
         public enmApprovalStatus ApprovalStatus { get; set; }
     }
 
+    public class d_Approval_with_delete
+    {
+        public DateTime? DeletedDt { get; set; }
+        public uint DeletedBy { get; set; }
+        [MaxLength(256)]
+        public string DeletedRemarks { get; set; } = string.Empty;
+    }
+
     public class d_Contact_With_Address
     {
 

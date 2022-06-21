@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common.Database;
+using Common.Enums;
 using HRMS.classes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -49,6 +50,17 @@ namespace HRMS.Database
         [ForeignKey("tblHolidayMaster")] // Foreign Key here        
         public uint? HolidayId { get; set; }
         public tblHolidayMaster tblHolidayMaster { get; set; }
+    }
+
+    public class tblEmpRosterWeek : d_Approval_with_delete
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public uint RosterId { get; set; }
+        public DateTime WeekoffDt { get; set; }
+        [ForeignKey("tblEmployeeMaster")]
+        public uint? EmpId { get; set; }
+        public tblEmployeeMaster tblEmployeeMaster { get; set; }
     }
 
 

@@ -16,6 +16,8 @@ namespace HRMS.Database
         public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
+
+        
     }
 
     public class tblEmployeeMaster_log : d_BasicDetails, IRequested,IApproval
@@ -364,7 +366,7 @@ namespace HRMS.Database
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
-    public class tblEmpOfficialDetails_Log : OfficialDetails
+    public class tblEmpOfficialDetails_log : OfficialDetails
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -408,7 +410,7 @@ namespace HRMS.Database
         public string ModifiedRemarks { get; set; } = string.Empty;
 
     }
-    public class tblEmpPersonalDetails_Log : PersonalDetails
+    public class tblEmpPersonalDetails_log : PersonalDetails
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -448,7 +450,7 @@ namespace HRMS.Database
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
 
-    public class tblEmpDocument_Log : DocumentDetails
+    public class tblEmpDocument_log : DocumentDetails
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -491,7 +493,7 @@ namespace HRMS.Database
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
 
-    public class tblEmpBankDetails_Log : BankDetails
+    public class tblEmpBankDetails_log : BankDetails
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -506,9 +508,9 @@ namespace HRMS.Database
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
         public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
-        [ForeignKey("tblEmpDocument_Log")] // Foreign Key here        
+        [ForeignKey("tblEmpDocument_log ")] // Foreign Key here        
         public uint? DocumentLogId { get; set; }
-        public tblEmpDocument_Log tblEmpDocument_Log { get; set; }
+        public tblEmpDocument_log tblEmpDocument_log { get; set; }
 
         [ForeignKey("tblEmpBankDetails")] // Foreign Key here        
         public new uint? BankDetailId { get; set; }
@@ -613,9 +615,9 @@ namespace HRMS.Database
         [MaxLength(128)]
         public string College { get; set; }
         public enmMonth DurationStartMonth { get; set; }
-        public Int16 DurationStartYear { get; set; }
+        public ushort DurationStartYear { get; set; }
         public enmMonth DurationEndMonth { get; set; }
-        public Int16 DurationEndYear { get; set; }
+        public ushort DurationEndYear { get; set; }
         public enmCourseType CourseType { get; set; }
         public double Percentage { get; set; }
         public DateTime? ModifiedDt { get; set; }
@@ -688,7 +690,7 @@ namespace HRMS.Database
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
 
-    public class tblEmpWorkExperience_Log
+    public class tblEmpWorkExperience_log
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

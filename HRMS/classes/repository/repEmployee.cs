@@ -2,8 +2,6 @@
 {
     public class Employee
     {
-        //public bool Create()
-        //{ 
-        //}
+        
     }
 }
