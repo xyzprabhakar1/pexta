@@ -189,6 +189,7 @@ namespace HRMS.Database
         public uint? CompanyId { get; set; }
         public uint? ZoneId { get; set; }
         public uint? LocationId { get; set; }
+        public uint? SubLocationId { get; set; }
         [NotMapped]
         public string CompanyName { get; set; }
         [NotMapped]
