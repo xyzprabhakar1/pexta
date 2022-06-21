@@ -10,12 +10,12 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PunchId { get; set; }
+        public uint PunchId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblMachineMaster")] // Foreign Key here        
-        public int? MachineId { get; set; }
+        public uint? MachineId { get; set; }
         public tblMachineMaster tblMachineMaster { get; set; }
         [ForeignKey("tblMachineMaster")] // Foreign Key here        
         public DateTime PunchTime { get; set; }
@@ -25,9 +25,9 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PunchId { get; set; }
+        public uint PunchId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public DateTime InTime { get; set; }
         public DateTime? OutTime { get; set; }        
@@ -36,9 +36,9 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PunchId { get; set; }
+        public uint PunchId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public DateTime InTime { get; set; }
         public DateTime? OutTime { get; set; }
@@ -46,7 +46,7 @@ namespace HRMS.Database
     public class tblEmployeeAttendance
     {
         [Key]
-        public int EmpId { get; set; }
+        public uint EmpId { get; set; }
         [Key]
         public DateTime AttendanceDt { get; set; }
         public DateTime InTime { get; set; }
@@ -59,10 +59,29 @@ namespace HRMS.Database
         public DateTime ShiftOutTime { get; set; }
         public bool IsHoliday { get; set; }
         public bool IsWeekoff { get; set; }
-        public bool HaveLeave { get; set; }
+        public bool IsLeaveApplied { get; set; }
+        public bool IsSandwichApplied { get; set; }
+        public bool IsLateIn { get; set; }
         public bool IsGraceApplied { get; set; }
-        public int TotalWorkingMinute { get; set; }
-        public int NetWorkingMinute { get; set; }
+        public bool IsOtApplied { get; set; }
+        public bool IsOutdoorApplied { get; set; }
+        public bool IsMobilepunchApplied { get; set; }
+        public bool IsManualPunchApplied { get; set; }
+        public bool IsRegularizeApplied { get; set; }
+        public ushort OtMinuter { get; set; }
+        public ushort TotalWorkingMinute { get; set; }
+        public ushort NetWorkingMinute { get; set; }
+        public enmDayStatus DayStatus { get; set; }
+        public enmPaidStatus PaidStatus { get; set; }
+    }
+    public class tblEmployeeAttendanceLeaveDetails
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public uint DetailId { get; set; }
+        public uint EmpId { get; set; }        
+        public DateTime AttendanceDt { get; set; }
+        
     }
 
 }

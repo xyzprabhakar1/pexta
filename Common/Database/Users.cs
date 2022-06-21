@@ -34,7 +34,7 @@ namespace Common.Database
         public DateTime logged_blocked_dt { get; set; }
         public DateTime logged_blocked_Enddt { get; set; }        
         [ForeignKey("tblOrganisation")] // Foreign Key here
-        public int? OrgId { get; set; }
+        public uint? OrgId { get; set; }
         public tblOrganisation tblOrganisation { get; set; }
         public bool RequiredChangePassword { get; set; } = false;
     }
@@ -43,7 +43,7 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RoleId { get; set; }  // primary key  must be public!   
+        public uint RoleId { get; set; }  // primary key  must be public!   
         [MaxLength(64)]
         public string RoleName { get; set; }
         public bool IsActive { get; set; }
@@ -53,9 +53,9 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RoleClaimId { get; set; }  // primary key  must be public!   
+        public uint RoleClaimId { get; set; }  // primary key  must be public!   
         [ForeignKey("tblRoleMaster")] // Foreign Key here
-        public int? RoleId { get; set; }
+        public uint? RoleId { get; set; }
         public tblRoleMaster tblRoleMaster { get; set; }
         public enmDocumentMaster DocumentMaster { get; set; }
         public enmDocumentType PermissionType { get; set; }
@@ -66,7 +66,7 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RoleClaimId { get; set; }  // primary key  must be public!   
+        public uint RoleClaimId { get; set; }  // primary key  must be public!   
         [ForeignKey("tblUsersMaster")] // Foreign Key here
         public ulong? UserId { get; set; }
         public tblUsersMaster tblUsersMaster { get; set; }
@@ -79,12 +79,12 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UserRoleId { get; set; }  // primary key  must be public!   
+        public uint UserRoleId { get; set; }  // primary key  must be public!   
         [ForeignKey("tblUsersMaster")] // Foreign Key here
         public ulong? UserId { get; set; }
         public tblUsersMaster tblUsersMaster { get; set; }
         [ForeignKey("tblRoleMaster")] // Foreign Key here
-        public int? RoleId { get; set; }
+        public uint? RoleId { get; set; }
         public tblRoleMaster tblRoleMaster { get; set; }
         public bool IsDeleted { get; set; }
     }
@@ -93,12 +93,12 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RoleClaimId { get; set; }  // primary key  must be public!   
+        public uint RoleClaimId { get; set; }  // primary key  must be public!   
         [ForeignKey("tblUsersMaster")] // Foreign Key here
         public ulong? UserId { get; set; }
         public tblUsersMaster tblUsersMaster { get; set; }
         public enmDocumentMaster DocumentMaster { get; set; }
-        public enmDocumentType PermissionType { get; set; }
+        public enmDocumentType DocumentType { get; set; }
         public string PermissionType { get; set; }
     }
 
@@ -149,7 +149,7 @@ namespace Common.Database
         public ulong? UserId { get; set; }
         public tblUsersMaster tblUsersMaster { get; set; }
         [ForeignKey("tblOrganisation")] // Foreign Key here
-        public int? OrgId { get; set; }
+        public uint? OrgId { get; set; }
         public tblOrganisation tblOrganisation { get; set; }
         public bool HaveAllCompanyAccess { get; set; }
         public bool IsDeleted { get; set; }
@@ -163,7 +163,7 @@ namespace Common.Database
         public ulong? UserId { get; set; }
         public tblUsersMaster tblUsersMaster { get; set; }
         [ForeignKey("tblCompanyMaster")] // Foreign Key here
-        public int? CompanyId { get; set; }
+        public uint? CompanyId { get; set; }
         public tblCompanyMaster tblCompanyMaster { get; set; }
         public bool HaveAllZoneAccess { get; set; }
         public bool IsDeleted { get; set; }
@@ -177,7 +177,7 @@ namespace Common.Database
         public ulong? UserId { get; set; }
         public tblUsersMaster tblUsersMaster { get; set; }
         [ForeignKey("tblZoneMaster")] // Foreign Key here
-        public int? ZoneId { get; set; }
+        public uint? ZoneId { get; set; }
         public tblZoneMaster tblZoneMaster { get; set; }
         public bool HaveAllLocationAccess { get; set; }
         public bool IsDeleted { get; set; }
@@ -191,7 +191,7 @@ namespace Common.Database
         public ulong? UserId { get; set; }
         public tblUsersMaster tblUsersMaster { get; set; }
         [ForeignKey("tblLocationMaster")] // Foreign Key here
-        public int? LocationId { get; set; }
+        public uint? LocationId { get; set; }
         public tblLocationMaster tblLocationMaster { get; set; }
         public bool IsDeleted { get; set; }
     }
@@ -205,7 +205,7 @@ namespace Common.Database
         public ulong? UserId { get; set; }
         public tblUsersMaster tblUsersMaster { get; set; }
         [ForeignKey("tblLocationMaster")] // Foreign Key here
-        public int? LocationId { get; set; }
+        public uint? LocationId { get; set; }
         public tblLocationMaster tblLocationMaster { get; set; }
 
     }

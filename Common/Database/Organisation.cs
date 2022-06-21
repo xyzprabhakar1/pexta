@@ -12,7 +12,7 @@ namespace Common.Database
 
     public abstract class _tblOrganisation : d_Contact_With_Address
     {
-        public int OrgId { get; set; }
+        public uint OrgId { get; set; }
         [MaxLength(16)]
         [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
         public string Code { get; set; } = String.Empty;
@@ -31,9 +31,9 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int OrgId { get; set; }
+        public new uint OrgId { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -42,16 +42,16 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblOrganisation")] // Foreign Key here        
-        public new int? OrgId { get; set; }
+        public new uint? OrgId { get; set; }
         public tblOrganisation tblOrganisation { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -62,7 +62,7 @@ namespace Common.Database
 
     public abstract class _tblCompanyMaster
     {
-        public int CompanyId { get; set; }
+        public uint CompanyId { get; set; }
         [MaxLength(16)]
         [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
         public string Code { get; set; } = String.Empty;
@@ -78,7 +78,7 @@ namespace Common.Database
         [NotMapped]
         public string OrgName { get; set; }
         [ForeignKey("tblOrganisation")] // Foreign Key here
-        public int? OrgId { get; set; }
+        public uint? OrgId { get; set; }
         public tblOrganisation tblOrganisation { get; set; }
         
     }
@@ -87,9 +87,9 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int CompanyId { get; set; }
+        public new uint CompanyId { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;     
     }
@@ -98,16 +98,16 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblCompanyMaster")] // Foreign Key here
-        public new int? CompanyId { get; set; }
+        public new uint? CompanyId { get; set; }
         public tblCompanyMaster tblCompanyMaster { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -118,7 +118,7 @@ namespace Common.Database
 
     public abstract class _tblZoneMaster : d_Contact_With_Address
     {
-        public int ZoneId { get; set; }
+        public uint ZoneId { get; set; }
         [MaxLength(254)]
         [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
         public string Name { get; set; } = String.Empty;
@@ -126,10 +126,10 @@ namespace Common.Database
         [NotMapped]
         public string CompanyName { get; set; } = String.Empty;
         [ForeignKey("tblCompanyMaster")] // Foreign Key here
-        public int? CompanyId { get; set; }
+        public uint? CompanyId { get; set; }
         public tblCompanyMaster tblCompanyMaster { get; set; }
         [ForeignKey("tblOrganisation")] // Foreign Key here
-        public int? OrgId { get; set; }
+        public uint? OrgId { get; set; }
         public tblOrganisation tblOrganisation { get; set; }
     }
 
@@ -137,9 +137,9 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int ZoneId { get; set; }
+        public new uint ZoneId { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
 
@@ -149,16 +149,16 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblZoneMaster")] // Foreign Key here
-        public new int? ZoneId { get; set; }
+        public new uint? ZoneId { get; set; }
         public tblZoneMaster tblZoneMaster { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -167,7 +167,7 @@ namespace Common.Database
 
     public class _tblLocationMaster : d_Contact_With_Address
     {
-        public int LocationId { get; set; }
+        public uint LocationId { get; set; }
         [MaxLength(254)]
         public string Name { get; set; }
         public enmLocationType LocationType { get; set; } = enmLocationType.None;
@@ -177,12 +177,12 @@ namespace Common.Database
         [NotMapped]
         public string ZoneName { get; set; }
         [ForeignKey("tblZoneMaster")] // Foreign Key here
-        public int? ZoneId { get; set; }
+        public uint? ZoneId { get; set; }
         public tblZoneMaster tblZoneMaster { get; set; }
         [NotMapped]
-        public int? CompanyId { get; set; }
+        public uint? CompanyId { get; set; }
         [ForeignKey("tblOrganisation")] // Foreign Key here
-        public int? OrgId { get; set; }
+        public uint? OrgId { get; set; }
         public tblOrganisation tblOrganisation { get; set; }
     }
     
@@ -190,9 +190,9 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int LocationId { get; set; }
+        public new uint LocationId { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -201,16 +201,16 @@ namespace Common.Database
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblLocationMaster")] // Foreign Key here
-        public new int? LocationId { get; set; }
+        public new uint? LocationId { get; set; }
         public tblLocationMaster tblLocationMaster { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -222,12 +222,12 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int SubLocationId { get; set; }
+        public uint SubLocationId { get; set; }
         [MaxLength(254)]
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }

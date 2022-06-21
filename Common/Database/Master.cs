@@ -12,7 +12,7 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CountryId { get; set; }  // primary key  must be public!
+        public uint CountryId { get; set; }  // primary key  must be public!
         [MaxLength(10)]
         public string Code { get; set; }
         [MaxLength(100)]
@@ -27,14 +27,14 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int StateId { get; set; }  // primary key  must be public!
+        public uint StateId { get; set; }  // primary key  must be public!
         [MaxLength(10)]
         public string Code { get; set; }
         [MaxLength(200)]
         public string Name { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey("tblCountry")]
-        public int? CountryId { get; set; }
+        public uint? CountryId { get; set; }
         public tblCountry tblCountry { get; set; }
 
     }
@@ -44,7 +44,7 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int BankId { get; set; }
+        public uint BankId { get; set; }
         [MaxLength(256)]
         public string BankName { get; set; }
         public bool IsActive { get; set; }
@@ -53,7 +53,7 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CurrencyId { get; set; }
+        public uint CurrencyId { get; set; }
         [MaxLength(128)]
         public string Name { get; set; }
         [MaxLength(8)]

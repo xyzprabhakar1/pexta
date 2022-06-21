@@ -12,31 +12,31 @@ namespace Common.Database
     public interface ICreated
     {
         public DateTime CreatedDt { get; set; }
-        public int CreatedBy { get; set; }
+        public uint CreatedBy { get; set; }
     }
     public interface IModified
     {
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         public string ModifiedRemarks { get; set; }
     }
     public interface IRequested
     {
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         public string RequestedRemarks { get; set; }
     }
     public interface IApproval 
     {
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         public string ApprovalRemarks { get; set; }
         public enmApprovalStatus ApprovalStatus { get; set; }
     }
     public class d_Modified : IModified
     {
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -44,11 +44,11 @@ namespace Common.Database
     public class d_CreatedModified: ICreated, IModified
     {
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]        
         public string ModifiedRemarks { get; set; } = string.Empty;
         public DateTime CreatedDt { get; set; }
-        public int CreatedBy { get; set; }
+        public uint CreatedBy { get; set; }
     }
 
     
@@ -56,11 +56,11 @@ namespace Common.Database
     public class d_Approval : IRequested, IApproval
     {
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]        
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]        
         public string ApprovalRemarks { get; set; }= string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -82,8 +82,8 @@ namespace Common.Database
         [DataType(DataType.PostalCode)]
         [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
         public string Pincode { get; set; } = String.Empty;
-        public int StateId { get; set; }
-        public int CountryId { get; set; }
+        public uint StateId { get; set; }
+        public uint CountryId { get; set; }
         [NotMapped]
         public string StateName { get; set; } = String.Empty;
         [NotMapped]
@@ -106,7 +106,7 @@ namespace Common.Database
     public class d_Address
     {
         
-        public int AddressId { get; set; }
+        public uint AddressId { get; set; }
         public enmContactType ContactType { get; set; }
         [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
         [MaxLength(254)]
@@ -121,8 +121,8 @@ namespace Common.Database
         [DataType(DataType.PostalCode)]
         [RegularExpression(@"^[^<>]+$", ErrorMessage = "Character < > are not allowed")]
         public string Pincode { get; set; } = String.Empty;
-        public int StateId { get; set; }
-        public int CountryId { get; set; }
+        public uint StateId { get; set; }
+        public uint CountryId { get; set; }
         [NotMapped]
         public string StateName { get; set; } = String.Empty;
         [NotMapped]
@@ -131,7 +131,7 @@ namespace Common.Database
 
     public class d_ContactDetails
     { 
-        public int ContactId { get; set; }
+        public uint ContactId { get; set; }
         public enmContactType ContactType { get; set; }
         [MaxLength(254)]
         [DataType(DataType.EmailAddress)]
@@ -142,7 +142,7 @@ namespace Common.Database
     }
     public class d_BasicDetails
     {
-        public int Id { get; set; }
+        public uint Id { get; set; }
         public enmTitle Title { get; set; }
         [Required]
         [MaxLength(30)]
@@ -164,18 +164,18 @@ namespace Common.Database
     public class OfficialDetails
     {
         
-        public int OfficialDetailId { get; set; }
+        public uint OfficialDetailId { get; set; }
         public DateTime OrgJoiningDt { get; set; }
         public DateTime ComJoiningDt { get; set; }
         public DateTime? TerminationDt { get; set; }
-        public int DefaultProbationPeriodMonth { get; set; }
-        public int DefaultProbationPeriodDay { get; set; }
-        public int DefaultNoticePeriodMonth { get; set; }
-        public int DefaultNoticePeriodDay { get; set; }
-        public int ActualProbationPeriodMonth { get; set; }
-        public int ActualProbationPeriodDay { get; set; }
-        public int ActualNoticePeriodMonth { get; set; }
-        public int ActualNoticePeriodDay { get; set; }
+        public uint DefaultProbationPeriodMonth { get; set; }
+        public uint DefaultProbationPeriodDay { get; set; }
+        public uint DefaultNoticePeriodMonth { get; set; }
+        public uint DefaultNoticePeriodDay { get; set; }
+        public uint ActualProbationPeriodMonth { get; set; }
+        public uint ActualProbationPeriodDay { get; set; }
+        public uint ActualNoticePeriodMonth { get; set; }
+        public uint ActualNoticePeriodDay { get; set; }
         [MaxLength(32)]
         public string PanNo{ get; set; }
         [MaxLength(256)]
@@ -193,7 +193,7 @@ namespace Common.Database
 
     public class PersonalDetails
     {
-        public int PersonalDetailId { get; set; }
+        public uint PersonalDetailId { get; set; }
         [MaxLength(32)]
         public string Nationality { get; set; }
         public enmReligion Religion { get; set; }
@@ -205,7 +205,7 @@ namespace Common.Database
     }
     public class DocumentDetails 
     {
-        public int DocumentDetailId { get; set; }
+        public uint DocumentDetailId { get; set; }
         public enmUploadDocumentType DocumentType { get; set; }
         [MaxLength(128)]
         public string DocumentNo { get; set; }
@@ -221,8 +221,8 @@ namespace Common.Database
 
     public class BankDetails 
     {
-        public int BankDetailId { get; set; }        
-        public int? BankId { get; set; }
+        public uint BankDetailId { get; set; }        
+        public uint? BankId { get; set; }
         [MaxLength(32)]
         public string BranchCode { get; set; }
         [MaxLength(64)]
@@ -234,13 +234,13 @@ namespace Common.Database
         [MaxLength(64)]
         public string NameonBank { get; set; }
         [NotMapped]
-        public int BankName { get; set; }
+        public uint BankName { get; set; }
         public bool IsActive { get; set; }
 
     }
     public class FamilyDetails
     {
-        public int FamilyDetailId { get; set; }        
+        public uint FamilyDetailId { get; set; }        
         public enmFamily enmFamily { get; set; }
         [MaxLength(32)]
         public string RelationName { get; set; }

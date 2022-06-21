@@ -11,9 +11,9 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int Id { get; set; }
+        public new uint Id { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -22,16 +22,16 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int Id { get; set; }
+        public new uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public  int? EmpId { get; set; }
+        public  uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -42,12 +42,12 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int AddressId { get; set; }
+        public new uint AddressId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -56,22 +56,22 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         [ForeignKey("tblEmpAddress")] // Foreign Key here        
-        public new int? AddressId { get; set; }
+        public new uint? AddressId { get; set; }
         public tblEmpAddress tblEmpAddress { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -82,12 +82,12 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int ContactId { get; set; }
+        public new uint ContactId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -96,22 +96,22 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         [ForeignKey("tblEmpContacts")] // Foreign Key here        
-        public new int? ContactId { get; set; }
+        public new uint? ContactId { get; set; }
         public tblEmpContacts tblEmpContacts { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -122,20 +122,20 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmpDepId { get; set; }
+        public uint EmpDepId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblDepartment")] // Foreign Key here        
-        public int? DepId { get; set; }
+        public uint? DepId { get; set; }
         public tblDepartment tblDepartment { get; set; }
         [ForeignKey("tblDepartWorkingRole")] // Foreign Key here        
-        public int? DepWorkingRoleId { get; set; }
+        public uint? DepWorkingRoleId { get; set; }
         public tblDepartWorkingRole tblDepartWorkingRole { get; set; }
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; }=DateTime.Now;
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -144,30 +144,30 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int  Id{ get; set; }
+        public uint  Id{ get; set; }
         [ForeignKey("tblEmpDepartment")] // Foreign Key here        
-        public int? EmpDepId { get; set; }
+        public uint? EmpDepId { get; set; }
         public tblEmpDepartment tblEmpDepartment { get; set; }        
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         [ForeignKey("tblDepartment")] // Foreign Key here        
-        public int? DepId { get; set; }
+        public uint? DepId { get; set; }
         public tblDepartment tblDepartment { get; set; }
         [ForeignKey("tblDepartWorkingRole")] // Foreign Key here        
-        public int? DepWorkingRoleId { get; set; }
+        public uint? DepWorkingRoleId { get; set; }
         public tblDepartWorkingRole tblDepartWorkingRole { get; set; }
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; } = DateTime.Now;
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -180,13 +180,13 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmpLocationId { get; set; }
+        public uint EmpLocationId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
-        public int? CompanyId { get; set; }
-        public int? ZoneId { get; set; }
-        public int? LocationId { get; set; }
+        public uint? CompanyId { get; set; }
+        public uint? ZoneId { get; set; }
+        public uint? LocationId { get; set; }
         [NotMapped]
         public string CompanyName { get; set; }
         [NotMapped]
@@ -196,7 +196,7 @@ namespace HRMS.Database
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; } = DateTime.Now;
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -205,20 +205,20 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblEmpLocation")] // Foreign Key here        
-        public int? EmpLocationId { get; set; }
+        public uint? EmpLocationId { get; set; }
         public tblEmpLocation tblEmpLocation { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
-        public int? CompanyId { get; set; }
-        public int? ZoneId { get; set; }
-        public int? LocationId { get; set; }
-        public int? SubLocationId { get; set; }
+        public uint? CompanyId { get; set; }
+        public uint? ZoneId { get; set; }
+        public uint? LocationId { get; set; }
+        public uint? SubLocationId { get; set; }
         [NotMapped]
         public string CompanyName { get; set; }
         [NotMapped]
@@ -230,11 +230,11 @@ namespace HRMS.Database
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; } = DateTime.Now;
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -247,21 +247,21 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmpDesId { get; set; }
+        public uint EmpDesId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblDesignation")] // Foreign Key here        
-        public int? DesId { get; set; }
+        public uint? DesId { get; set; }
         public tblDesignation tblDesignation { get; set; }
         [ForeignKey("tblGrade")] // Foreign Key here        
-        public int? GradeId { get; set; }
+        public uint? GradeId { get; set; }
         public tblGrade tblGrade { get; set; }
 
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; } = DateTime.Now;
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -270,30 +270,30 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblEmpDesignation")] // Foreign Key here        
-        public int? EmpDesId { get; set; }
+        public uint? EmpDesId { get; set; }
         public tblEmpDesignation tblEmpDesignation { get; set; }        
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblDesignation")] // Foreign Key here        
-        public int? DesId { get; set; }
+        public uint? DesId { get; set; }
         public tblDesignation tblDesignation { get; set; }
         [ForeignKey("tblGrade")] // Foreign Key here        
-        public int? GradeId { get; set; }
+        public uint? GradeId { get; set; }
         public tblGrade tblGrade { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; } = DateTime.Now;
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -305,17 +305,17 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }        
+        public uint Id { get; set; }        
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_Mgr")] // Foreign Key here        
-        public int? ManagerId { get; set; }
+        public uint? ManagerId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster_Mgr { get; set; }
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; } = DateTime.Now;
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -324,24 +324,24 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_Mgr")] // Foreign Key here        
-        public int? ManagerId { get; set; }
+        public uint? ManagerId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster_Mgr { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         public bool IsActive { get; set; }
         public DateTime EffectiveDt { get; set; } = DateTime.Now;
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -353,14 +353,14 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int OfficialDetailId { get; set; }
+        public new uint OfficialDetailId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         [MaxLength(32)]
         public string CardNo { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }                        
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -368,24 +368,24 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int Id { get; set; }
+        public new uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         [ForeignKey("tblEmpOfficialDetails")] // Foreign Key here        
-        public new int? OfficialDetailId { get; set; }
+        public new uint? OfficialDetailId { get; set; }
         public tblEmpOfficialDetails tblEmpOfficialDetails { get; set; }
         [MaxLength(32)]
         public string CardNo { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -398,12 +398,12 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int PersonalDetailId { get; set; }
+        public new uint PersonalDetailId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
 
@@ -412,22 +412,22 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int Id { get; set; }
+        public new uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         [ForeignKey("tblEmpPersonalDetails")] // Foreign Key here        
-        public new int? PersonalDetailId { get; set; }
+        public new uint? PersonalDetailId { get; set; }
         public tblEmpPersonalDetails tblEmpPersonalDetails { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -438,12 +438,12 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int DocumentDetailId { get; set; }
+        public new uint DocumentDetailId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -452,22 +452,22 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here                
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         [ForeignKey("tblEmpDocument")] // Foreign Key here        
-        public new int? DocumentDetailId { get; set; }
+        public new uint? DocumentDetailId { get; set; }
         public tblEmpDocument tblEmpDocument { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -478,15 +478,15 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public new int BankDetailId { get; set; }
+        public new uint BankDetailId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmpDocument")] // Foreign Key here        
-        public int? DocumentId { get; set; }
+        public uint? DocumentId { get; set; }
         public tblEmpDocument tblEmpDocument { get; set; }        
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -495,31 +495,31 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmpDocument")] // Foreign Key here        
-        public int? DocumentId { get; set; }
+        public uint? DocumentId { get; set; }
         public tblEmpDocument tblEmpDocument { get; set; }
 
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         [ForeignKey("tblEmpDocument_Log")] // Foreign Key here        
-        public int? DocumentLogId { get; set; }
+        public uint? DocumentLogId { get; set; }
         public tblEmpDocument_Log tblEmpDocument_Log { get; set; }
 
         [ForeignKey("tblEmpBankDetails")] // Foreign Key here        
-        public new int? BankDetailId { get; set; }
+        public new uint? BankDetailId { get; set; }
         public tblEmpBankDetails tblEmpBankDetails { get; set; }
 
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -558,12 +558,12 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int FamilyDetailId { get; set; }
+        public uint FamilyDetailId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
 
@@ -573,22 +573,22 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] 
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmpFamilyDetails")] 
-        public int? FamilyDetailId { get; set; }
+        public uint? FamilyDetailId { get; set; }
         public tblEmpFamilyDetails tblEmpFamilyDetails { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] 
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -599,9 +599,9 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int QualificationId { get; set; }
+        public uint QualificationId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         public enmQualification QualificationType { get; set; }
         [MaxLength(32)]
@@ -619,7 +619,7 @@ namespace HRMS.Database
         public enmCourseType CourseType { get; set; }
         public double Percentage { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -628,12 +628,12 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int QualificationId { get; set; }
+        public uint QualificationId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         public enmQualification QualificationType { get; set; }
         [MaxLength(32)]
@@ -651,11 +651,11 @@ namespace HRMS.Database
         public enmCourseType CourseType { get; set; }
         public double Percentage { get; set; }
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }
@@ -667,9 +667,9 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int WorkExperienceId { get; set; }
+        public uint WorkExperienceId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [MaxLength(256)]
         public string CompanyName { get; set; }
@@ -683,7 +683,7 @@ namespace HRMS.Database
         public string EmployeeCode{ get; set; }
         public double AnnualSalary { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
     }
@@ -692,15 +692,15 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         [ForeignKey("tblEmpWorkExperience")] // Foreign Key here        
-        public int? WorkExperienceId { get; set; }
+        public uint? WorkExperienceId { get; set; }
         public tblEmpWorkExperience tblEmpWorkExperience { get; set; }
         [MaxLength(256)]
         public string CompanyName { get; set; }
@@ -714,15 +714,15 @@ namespace HRMS.Database
         public string EmployeeCode { get; set; }
         public double AnnualSalary { get; set; }
         public DateTime? ModifiedDt { get; set; }
-        public int? ModifiedBy { get; set; }
+        public uint? ModifiedBy { get; set; }
         [MaxLength(256)]
         public string ModifiedRemarks { get; set; } = string.Empty;
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }

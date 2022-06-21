@@ -13,7 +13,7 @@ namespace Common.Database
     {
         [Key()]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         public enmCodeGenrationType CodeGenrationType { get; set; }
         public string Prefix { get; set; }=String.Empty;
         public bool IncludeCountryCode { get; set; }
@@ -31,19 +31,19 @@ namespace Common.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Sno { get; set; }
+        public uint Sno { get; set; }
         [ForeignKey("tblCodeGenrationMaster")] // Foreign Key here
-        public int? Id { get; set; }
+        public uint? Id { get; set; }
         public tblCodeGenrationMaster tblCodeGenrationMaster { get; set; }
         public string CountryCode { get; set; } = "";
         public string StateCode { get; set; } = "";
         public string CompanyCode { get; set; } = "";
         public string ZoneCode { get; set; } = "";
         public string LocationCode { get; set; } = "";
-        public int MonthYear { get; set; }
-        public int Year { get; set; }
-        public int YearWeek { get; set; }
-        public int Counter { get; set; } = 1;
+        public uint MonthYear { get; set; }
+        public uint Year { get; set; }
+        public uint YearWeek { get; set; }
+        public uint Counter { get; set; } = 1;
         [Timestamp]
         [ConcurrencyCheck]
         public byte[] RowVersion { get; set; }        
@@ -54,15 +54,15 @@ namespace Common.Database
     public class tblCodeGenrationMaster_log : tblCodeGenrationMaster, IRequested, IApproval
     {
         [ForeignKey("tblCodeGenrationMaster")] // Foreign Key here
-        public int? CodeGenrationMasterId { get; set; }
+        public uint? CodeGenrationMasterId { get; set; }
         public tblCodeGenrationMaster tblCodeGenrationMaster { get; set; }
         public enmEntityType EntityType { get; set; } = enmEntityType.Create;
         public DateTime RequestedDt { get; set; }
-        public int RequestedBy { get; set; }
+        public uint RequestedBy { get; set; }
         [MaxLength(256)]        
         public string RequestedRemarks { get; set; } = string.Empty;
         public DateTime? ApprovalDt { get; set; }
-        public int? ApprovalBy { get; set; }
+        public uint? ApprovalBy { get; set; }
         [MaxLength(256)]        
         public string ApprovalRemarks { get; set; } = string.Empty;
         public enmApprovalStatus ApprovalStatus { get; set; }

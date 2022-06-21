@@ -8,7 +8,7 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int HolidayId { get; set; }
+        public uint HolidayId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime Todate { get; set; }
         [MaxLength(64)]
@@ -22,7 +22,7 @@ namespace HRMS.Database
         
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DeptId { get; set; }
+        public uint DeptId { get; set; }
         [MaxLength(16)]
         public string Code { get; set; }
         [MaxLength(64)]
@@ -34,55 +34,55 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int WorkingRoleId { get; set; }
+        public uint WorkingRoleId { get; set; }
         [MaxLength(64)]
         public string Name { get; set; }
         public bool IsActive { get; set; }
         [ForeignKey("tblDepartment")] // Foreign Key here
-        public int? DeptId { get; set; }
+        public uint? DeptId { get; set; }
         public tblDepartment tblDepartment { get; set; }
-        public int OrgId { get; set; }
+        public uint OrgId { get; set; }
     }
 
     public class tblGrade : d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [MaxLength(64)]
         public string Name { get; set; }
-        public int Level { get; set; }
+        public uint Level { get; set; }
         public bool IsActive { get; set; }
-        public int OrgId { get; set; }
+        public uint OrgId { get; set; }
     }
     public class tblDesignation : d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [MaxLength(64)]
         public string Name { get; set; }
-        public int Level { get; set; }
+        public uint Level { get; set; }
         public bool IsActive { get; set; }
-        public int OrgId { get; set; }
+        public uint OrgId { get; set; }
     }
     public class tblReligionMaster : d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public uint Id { get; set; }
         [MaxLength(64)]
         public string Name { get; set; }
-        public int Level { get; set; }
+        public uint Level { get; set; }
         public bool IsActive { get; set; }
-        public int OrgId { get; set; }
+        public uint OrgId { get; set; }
     }
 
     public class tblMachineMaster : d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int MachineId { get; set; }
+        public uint MachineId { get; set; }
         [MaxLength(64)]
         public string Name { get; set; }
         [MaxLength(64)]
@@ -90,8 +90,8 @@ namespace HRMS.Database
         public ushort Port { get; set; }
         [MaxLength(64)]
         public string Password { get; set;}
-        public int? LocationId { get; set; }
-        public int? SubLocationId { get; set; }
+        public uint? LocationId { get; set; }
+        public uint? SubLocationId { get; set; }
         [NotMapped]        
         public string LocationName { get; set; }
         [NotMapped]

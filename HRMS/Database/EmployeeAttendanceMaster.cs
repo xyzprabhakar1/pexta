@@ -9,16 +9,20 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int  EmpAttendanceId { get; set; }
+        public uint  EmpAttendanceId { get; set; }
         [ForeignKey("tblEmployeeMaster")] // Foreign Key here        
-        public int? EmpId { get; set; }
+        public uint? EmpId { get; set; }
         public tblEmployeeMaster tblEmployeeMaster { get; set; }
         [ForeignKey("tblEmployeeMaster_log")] // Foreign Key here        
-        public int? EmpLogId { get; set; }
+        public uint? EmpLogId { get; set; }
         public tblEmployeeMaster_log tblEmployeeMaster_log { get; set; }
         [ForeignKey("tblAttendanceGroup")] // Foreign Key here        
-        public new int? AttendanceGroupId { get; set; }
+        public new uint? AttendanceGroupId { get; set; }
         public tblAttendanceGroup tblAttendanceGroup { get; set; }
+        [NotMapped]
+        public new string GroupName { get; set; }
+        [NotMapped]
+        public bool IsDefault { get; set; }
         public DateTime EffectiveFromDt { get; set; }
     }
 
@@ -26,24 +30,24 @@ namespace HRMS.Database
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmpGroupId { get; set; }
+        public uint EmpGroupId { get; set; }
         [ForeignKey("tblEmpAttendance")] // Foreign Key here        
-        public int? EmpAttendanceId { get; set; }
+        public uint? EmpAttendanceId { get; set; }
         public tblEmpAttendance tblEmpAttendance { get; set; }
         [ForeignKey("tblLeaveMaster")] // Foreign Key here        
-        public int? LeaveId { get; set; }
+        public uint? LeaveId { get; set; }
         public tblLeaveMaster tblLeaveMaster { get; set; }
     }
     public class tblEmpHolidayGroup
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EmpGroupId { get; set; }
+        public uint EmpGroupId { get; set; }
         [ForeignKey("tblEmpAttendance")] // Foreign Key here        
-        public int? EmpAttendanceId { get; set; }
+        public uint? EmpAttendanceId { get; set; }
         public tblEmpAttendance tblEmpAttendance { get; set; }
         [ForeignKey("tblHolidayMaster")] // Foreign Key here        
-        public int? HolidayId { get; set; }
+        public uint? HolidayId { get; set; }
         public tblHolidayMaster tblHolidayMaster { get; set; }
     }
 

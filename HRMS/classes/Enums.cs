@@ -53,6 +53,19 @@
         BereavementLeave=8,
         LeaveWithoutPay=10,//Loss of Pay (LOP) / Leave Without Pay (LWP)
     }
+    public enum enmApplicabilityType : byte
+    {
+        None=0,
+        FullDay=1,
+        HalfDay=2,
+        ShortLeave=4,
+    }
+    public enum enmDayPart : byte
+    {
+        None=0,
+        FirstHalf=1,
+        SecondHalf=2,
+    }
 
     public enum enmPunchType : byte
     {
@@ -61,5 +74,22 @@
         SinglePunchAbsent = 2,
         PunchExempted = 2,
 
+    }
+
+    public enum enmDayStatus:byte
+    {
+        None=0,
+        Present=1,
+        Absent=2,
+        Leave=3,
+        Holiday=4,
+        Weekoff=5,
+        HalfDay=6,
+    }
+    public enum enmPaidStatus:byte
+    {
+        Unpaid=0,
+        Paid=1,
+        HalfPaid=2
     }
 }
