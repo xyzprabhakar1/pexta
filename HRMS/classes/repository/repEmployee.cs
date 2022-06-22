@@ -1,6 +1,8 @@
 ﻿using Common;
 using HRMS.Database;
 using HRMS.Models;
+using Common.Enums;
+using Common.Attribute;
 
 namespace HRMS.classes.repository
 {
@@ -13,14 +15,7 @@ namespace HRMS.classes.repository
         {
             _HRMSContext = hrmsContext;
         }
-        private void SetDefaultParameter()
-        {
-            if (this.dtp == null)
-            {
-                dtp = new DataTableParameters() { columns = new List<mdlDataTableColumn>(), order = new List<mdlDataOrder>(), search = new mdlSearch() { regex = false, value = "" } };
-            }
-        }
-
+        
         private IQueryable<tblEmpDepartment> GetCurrentDepartmentQuery(DateTime EffectiveDt)
         {
             var TempQuery = _HRMSContext.tblEmpDepartment.Where(q => q.IsActive && q.EffectiveDt <= EffectiveDt).AsQueryable();
@@ -68,14 +63,73 @@ namespace HRMS.classes.repository
             return Query;
         }
 
+        private IQueryable<tblEmployeeMaster> GetCurrentEmpQuery(bool OnlyActive = true)
+        {
+            return OnlyActive ? _HRMSContext.tblEmployeeMaster.Where(p => p.IsActive) : _HRMSContext.tblEmployeeMaster;
+        }
+
+        private IQueryable<tblEmpContacts> GetEmpCurrentContact(enmContactType ContactType)
+        {
+
+            var TempQuery = _HRMSContext.tblEmpContacts.Where(q => q.ContactType== ContactType && q.IsActive).AsQueryable();            
+            return TempQuery;
+        }
+
 
 
         public IEnumerable<mdlEmployeeBasic> GetBasicDetail(DateTime EffectiveDt,bool AllData, Dictionary<uint,string> Departmentlst, Dictionary<uint,string> Locationlst , bool OnlyActive=true )
         {
             IEnumerable<mdlEmployeeBasic> empBasic = new List<mdlEmployeeBasic>();
-            SetDefaultParameter();
-            GetCurrentDepartmentQuery(EffectiveDt);
-            GetCurrentLocationQuery(EffectiveDt);
+            
+            
+            var EmpQuery= GetCurrentEmpQuery(OnlyActive);
+            var EmpContactQuery = GetEmpCurrentContact(enmContactType.Official);
+            var EmpDepartmentQuery = Departmentlst?.Count>0? GetCurrentDepartmentQuery(EffectiveDt).Where(q=> Departmentlst.Keys.Contains( q.DepId??0)): GetCurrentDepartmentQuery(EffectiveDt);
+            var EmpLocationQuery = Locationlst?.Count>0? GetCurrentLocationQuery(EffectiveDt).Where(q=> Locationlst.Keys.Contains( q.LocationId??0)): GetCurrentLocationQuery(EffectiveDt);
+
+            var FinalQuery = from t1 in EmpQuery
+                             join t2 in EmpContactQuery on t1.Id equals t2.EmpId
+                             join t3 in EmpDepartmentQuery on t1.Id equals t3.EmpId
+                             join t4 in EmpLocationQuery on t1.Id equals t4.EmpId
+                             join t5 in _HRMSContext.tblDepartment on t3.DepId equals t5.DeptId
+                             select new mdlEmployeeBasic
+                             {
+                                 Id=t1.Id,
+                                 Code=t1.Code,
+                                 EmpName=(t1.Title==enmTitle.MR?"Mr ": t1.Title == enmTitle.MRS?"Mrs ": t1.Title == enmTitle.MASTER ? "Master " : t1.Title == enmTitle.MISS ? "Miss " : "")+
+                                 t1.FirstName+" "+
+                                 (!(t1.MiddleName==null || t1.MiddleName=="")? t1.MiddleName+" ":"")+
+                                 t1.LastName,
+                                 OfficialEmail=t2.Email,
+                                 OfficialContactNo=t2.ContactNo,
+                                 DepId=t3.DepId??0,
+                                 DepartmentName="("+t5.Code +") - "+t5.Name,
+                                 LocationId =t4.LocationId??0,
+                                 SubLocationId=t4.SubLocationId??0
+                             };
+
+
+
+            if (!string.IsNullOrEmpty( dtp?.search?.value ))
+            {
+                FinalQuery = FinalQuery.Where(p => p.OfficialEmail.Contains(dtp.search.value) ||
+                p.EmpName.Contains(dtp.search.value) ||
+                p.OfficialContactNo.Contains(dtp.search.value)||
+                p.Code.Contains(dtp.search.value) ||
+                p.DepartmentName.Contains(dtp.search.value)
+                );
+            }
+
+            if (dtp?.order?.Count > 0)
+            {
+                string ColumnName = (dtp?.columns?.Count ?? 0) > dtp.order[0].column ? dtp.columns[dtp.order[0].column].name : "";
+                FinalQuery = LinqHelper.DataSorting<mdlEmployeeBasic>(FinalQuery, ColumnName, dtp.order[0].dir);
+            }
+            if (dtp?.length > 0)
+            {
+                FinalQuery = FinalQuery.Skip(dtp.start).Take(dtp.length);
+            }
+            empBasic = FinalQuery;
             return empBasic;
         }
     }

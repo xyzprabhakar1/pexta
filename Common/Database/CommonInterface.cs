@@ -135,6 +135,7 @@ namespace Common.Database
         public string StateName { get; set; } = String.Empty;
         [NotMapped]
         public string CountryName { get; set; } = String.Empty;
+        public bool IsActive { get; set; } = true;
     }
 
     public class d_ContactDetails
@@ -146,7 +147,8 @@ namespace Common.Database
         public string Email { get; set; }      
         [MaxLength(16)]
         [DataType(DataType.PhoneNumber)]
-        public string ContactNo { get; set; } 
+        public string ContactNo { get; set; }
+        public bool IsActive { get; set; } = true;
     }
     public class d_BasicDetails
     {

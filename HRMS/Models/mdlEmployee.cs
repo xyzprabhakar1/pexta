@@ -10,6 +10,7 @@
         public string OfficialEmail { get; set; }
         public string OfficialContactNo { get; set; }
         public uint DepId { get; set; }
+        public string DepartmentName{ get; set; }
         public uint LocationId { get; set; }
         public uint SubLocationId { get; set; }
     }

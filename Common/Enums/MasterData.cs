@@ -65,12 +65,13 @@ namespace Common.Enums
         MISS = 3,
         MASTER = 4
     }
-    public enum enmContactType
+    public enum enmContactType :byte
     {
-        Official=1,
+        None = 0,
+        Official =1,
         Primary = 2,
-        Corresponding = 3,
-        Emergency = 4,
+        Corresponding = 4,
+        Emergency = 8,
     }
     public enum enmReligion
     {
