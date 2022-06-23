@@ -1,12 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+// Add Connection string 
+builder.Services.AddDbContext<HRMS.Database.HRMSContext>(opt => opt.UseMySql(builder.Configuration.GetConnectionString("PextaHrms"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("PextaHrms")),opt=>opt.CommandTimeout(180)));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

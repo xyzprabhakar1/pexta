@@ -2,7 +2,6 @@
 using HRMS.Database;
 using HRMS.Models;
 using Common.Enums;
-using Common.Attribute;
 
 namespace HRMS.classes.repository
 {
@@ -80,8 +79,6 @@ namespace HRMS.classes.repository
         public IEnumerable<mdlEmployeeBasic> GetBasicDetail(DateTime EffectiveDt,bool AllData, Dictionary<uint,string> Departmentlst, Dictionary<uint,string> Locationlst , bool OnlyActive=true )
         {
             IEnumerable<mdlEmployeeBasic> empBasic = new List<mdlEmployeeBasic>();
-            
-            
             var EmpQuery= GetCurrentEmpQuery(OnlyActive);
             var EmpContactQuery = GetEmpCurrentContact(enmContactType.Official);
             var EmpDepartmentQuery = Departmentlst?.Count>0? GetCurrentDepartmentQuery(EffectiveDt).Where(q=> Departmentlst.Keys.Contains( q.DepId??0)): GetCurrentDepartmentQuery(EffectiveDt);

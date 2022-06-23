@@ -6,12 +6,10 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Attribute
+namespace Common
 {
     public class LinqHelper
     {
-
-
         public static IQueryable<T> DataSorting<T>(IQueryable<T> source, string sortExpression, string sortDirection)
         {
             string sortingDir = string.Empty;
