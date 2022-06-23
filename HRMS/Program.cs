@@ -1,3 +1,4 @@
+using HRMS.classes.repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Add Connection string 
 builder.Services.AddDbContext<HRMS.Database.HRMSContext>(opt => opt.UseMySql(builder.Configuration.GetConnectionString("PextaHrms"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("PextaHrms")),opt=>opt.CommandTimeout(180)));
+builder.Services.AddScoped<IserEmployee>(srv => new serEmployee(srv.GetRequiredService<HRMS.Database.HRMSContext>()));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

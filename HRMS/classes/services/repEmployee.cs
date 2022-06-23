@@ -5,16 +5,21 @@ using Common.Enums;
 
 namespace HRMS.classes.repository
 {
-    public class repEmployee
+    public interface IserEmployee
     {
-        
+        IEnumerable<mdlEmployeeBasic> GetBasicDetail(DateTime EffectiveDt, bool AllData, Dictionary<uint, string> Departmentlst, Dictionary<uint, string> Locationlst, bool OnlyActive = true);
+    }
+
+    public class serEmployee : IserEmployee
+    {
+
         private readonly HRMSContext _HRMSContext;
-        public DataTableParameters dtp=null;
-        public repEmployee(HRMSContext hrmsContext)
+        public DataTableParameters dtp = null;
+        public serEmployee(HRMSContext hrmsContext)
         {
             _HRMSContext = hrmsContext;
         }
-        
+
         private IQueryable<tblEmpDepartment> GetCurrentDepartmentQuery(DateTime EffectiveDt)
         {
             var TempQuery = _HRMSContext.tblEmpDepartment.Where(q => q.IsActive && q.EffectiveDt <= EffectiveDt).AsQueryable();
@@ -70,19 +75,19 @@ namespace HRMS.classes.repository
         private IQueryable<tblEmpContacts> GetEmpCurrentContact(enmContactType ContactType)
         {
 
-            var TempQuery = _HRMSContext.tblEmpContacts.Where(q => q.ContactType== ContactType && q.IsActive).AsQueryable();            
+            var TempQuery = _HRMSContext.tblEmpContacts.Where(q => q.ContactType == ContactType && q.IsActive).AsQueryable();
             return TempQuery;
         }
 
 
 
-        public IEnumerable<mdlEmployeeBasic> GetBasicDetail(DateTime EffectiveDt,bool AllData, Dictionary<uint,string> Departmentlst, Dictionary<uint,string> Locationlst , bool OnlyActive=true )
+        public IEnumerable<mdlEmployeeBasic> GetBasicDetail(DateTime EffectiveDt, bool AllData, Dictionary<uint, string> Departmentlst, Dictionary<uint, string> Locationlst, bool OnlyActive = true)
         {
             IEnumerable<mdlEmployeeBasic> empBasic = new List<mdlEmployeeBasic>();
-            var EmpQuery= GetCurrentEmpQuery(OnlyActive);
+            var EmpQuery = GetCurrentEmpQuery(OnlyActive);
             var EmpContactQuery = GetEmpCurrentContact(enmContactType.Official);
-            var EmpDepartmentQuery = Departmentlst?.Count>0? GetCurrentDepartmentQuery(EffectiveDt).Where(q=> Departmentlst.Keys.Contains( q.DepId??0)): GetCurrentDepartmentQuery(EffectiveDt);
-            var EmpLocationQuery = Locationlst?.Count>0? GetCurrentLocationQuery(EffectiveDt).Where(q=> Locationlst.Keys.Contains( q.LocationId??0)): GetCurrentLocationQuery(EffectiveDt);
+            var EmpDepartmentQuery = Departmentlst?.Count > 0 ? GetCurrentDepartmentQuery(EffectiveDt).Where(q => Departmentlst.Keys.Contains(q.DepId ?? 0)) : GetCurrentDepartmentQuery(EffectiveDt);
+            var EmpLocationQuery = Locationlst?.Count > 0 ? GetCurrentLocationQuery(EffectiveDt).Where(q => Locationlst.Keys.Contains(q.LocationId ?? 0)) : GetCurrentLocationQuery(EffectiveDt);
 
             var FinalQuery = from t1 in EmpQuery
                              join t2 in EmpContactQuery on t1.Id equals t2.EmpId
@@ -91,27 +96,27 @@ namespace HRMS.classes.repository
                              join t5 in _HRMSContext.tblDepartment on t3.DepId equals t5.DeptId
                              select new mdlEmployeeBasic
                              {
-                                 Id=t1.Id,
-                                 Code=t1.Code,
-                                 EmpName=(t1.Title==enmTitle.MR?"Mr ": t1.Title == enmTitle.MRS?"Mrs ": t1.Title == enmTitle.MASTER ? "Master " : t1.Title == enmTitle.MISS ? "Miss " : "")+
-                                 t1.FirstName+" "+
-                                 (!(t1.MiddleName==null || t1.MiddleName=="")? t1.MiddleName+" ":"")+
+                                 Id = t1.Id,
+                                 Code = t1.Code,
+                                 EmpName = (t1.Title == enmTitle.MR ? "Mr " : t1.Title == enmTitle.MRS ? "Mrs " : t1.Title == enmTitle.MASTER ? "Master " : t1.Title == enmTitle.MISS ? "Miss " : "") +
+                                 t1.FirstName + " " +
+                                 (!(t1.MiddleName == null || t1.MiddleName == "") ? t1.MiddleName + " " : "") +
                                  t1.LastName,
-                                 OfficialEmail=t2.Email,
-                                 OfficialContactNo=t2.ContactNo,
-                                 DepId=t3.DepId??0,
-                                 DepartmentName="("+t5.Code +") - "+t5.Name,
-                                 LocationId =t4.LocationId??0,
-                                 SubLocationId=t4.SubLocationId??0
+                                 OfficialEmail = t2.Email,
+                                 OfficialContactNo = t2.ContactNo,
+                                 DepId = t3.DepId ?? 0,
+                                 DepartmentName = "(" + t5.Code + ") - " + t5.Name,
+                                 LocationId = t4.LocationId ?? 0,
+                                 SubLocationId = t4.SubLocationId ?? 0
                              };
 
 
 
-            if (!string.IsNullOrEmpty( dtp?.search?.value ))
+            if (!string.IsNullOrEmpty(dtp?.search?.value))
             {
                 FinalQuery = FinalQuery.Where(p => p.OfficialEmail.Contains(dtp.search.value) ||
                 p.EmpName.Contains(dtp.search.value) ||
-                p.OfficialContactNo.Contains(dtp.search.value)||
+                p.OfficialContactNo.Contains(dtp.search.value) ||
                 p.Code.Contains(dtp.search.value) ||
                 p.DepartmentName.Contains(dtp.search.value)
                 );
