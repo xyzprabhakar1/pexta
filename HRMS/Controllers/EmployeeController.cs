@@ -23,7 +23,9 @@ namespace HRMS.Controllers
             DateTime CurrentDt = DateTime.Now;
             Dictionary<uint, string> Departmentlst = new Dictionary<uint, string>();
             Dictionary<uint, string> Locationlst = new Dictionary<uint, string>();
-           return _serEmployee.GetBasicDetail(CurrentDt, false, Departmentlst, Locationlst, true);
+            return _serEmployee.GetBasicDetail(CurrentDt, false, Departmentlst, Locationlst, true);
+            var tempData= _serEmployee.GetBasicDetail(CurrentDt, false, Departmentlst, Locationlst, true).ToList();
+            return tempData;
         }
 
     }
