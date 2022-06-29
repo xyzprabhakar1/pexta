@@ -34,7 +34,17 @@ namespace HRMS.Controllers
         [Route("test")]
         public IEnumerable<tblEmpLocation> test()
         {
+            
             return LinqHelper.CurrentData(_hRMSContext.tblEmpLocation, "EffectiveDt");
+        }
+        [HttpPost]
+        [Route("test1")]
+        public dynamic test1()
+        {
+          var tempData= _hRMSContext.tblEmpLocation.Where(p=>p.EmpId==400).OrderBy(p=>p.EffectiveDt).DistinctBy(p=>p.EmpId);
+            return tempData;
+
+
         }
 
     }

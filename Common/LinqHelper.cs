@@ -28,8 +28,17 @@ namespace Common
             return query;
         }
 
+        private class GroupByEffectiveDate1
+        {
+            public uint sno { get; set; }
+            public uint ?Id { get; set; }
+            public DateTime EffectiveDt { get; set; }
+        }
+
+        
         public static IQueryable<T> CurrentData<T>(IQueryable<T> source,string GroupColumnName= "EmpId", string DateColumnName= "EffectiveDt") where T : class
-        {   
+        {
+            
             DateTime CurrentDate=DateTime.Now;
             Type classType = typeof(T);
             PropertyInfo? pi_EffectiveDt_ = classType.GetProperty(DateColumnName);
@@ -49,7 +58,7 @@ namespace Common
             PropertyInfo? pi_IsDeleted= classType.GetProperty("IsDeleted");
             ParameterExpression param = Expression.Parameter(classType, "t");
 
-            MemberExpression EffectiveDt_ = Expression.Property(param, DateColumnName);
+            MemberExpression EffectiveDt_ = Expression.Property(param, DateColumnName);            
             MemberExpression GroupBy_ = Expression.Property(param, GroupColumnName);
             
             var CurrentDt_ = Expression.Constant(CurrentDate, typeof(DateTime));
@@ -63,14 +72,30 @@ namespace Common
             (IsActive_ != null && IsDeleted_ == null)? Expression.Lambda<Func<T, bool>>(Expression.AndAlso(Expression.LessThan(EffectiveDt_, CurrentDt_),IsActive_), new ParameterExpression[] { param }) :
             (IsActive_ == null && IsDeleted_ != null) ? Expression.Lambda<Func<T, bool>>(Expression.AndAlso(Expression.LessThan(EffectiveDt_, CurrentDt_),Expression.Not(IsDeleted_)), new ParameterExpression[] { param }) :
             Expression.Lambda<Func<T, bool>>(Expression.LessThan(EffectiveDt_, CurrentDt_), new ParameterExpression[] { param }));
-            
-            var Condition2 = Expression.Lambda<T,Tkey>(GroupBy_);
-            IQueryable <T> query = source.Where(Condition1).GroupBy(Condition2) ;
 
+            //Expression expr = Expression.Call(typeof(Queryable), "Where", new Type[] { source.ElementType },  source.Expression, Condition1);
+            //IQueryable<T> query = source.AsQueryable().Provider.CreateQuery<T>(expr);
+            IQueryable <T> query = source.Where(Condition1);
+
+            //IQueryable<GroupByEffectiveDate1> query1 = query.Select();
+            var Condition2 = Expression.Lambda<Func<T, uint>>(GroupBy_);
+            var Condition3 = Expression.Lambda<Func<T,DateTime>>(EffectiveDt_);
+            var gr = query.GroupBy(Condition2);
             
+            ParameterExpression param1 = Expression.Parameter(typeof(IGrouping<uint,T>), "p");
+            MemberExpression p1 = Expression.Property(param1, "Key");
+            var expr = Expression.Call(typeof(Queryable), "Max", new Type[] { source.ElementType },  source.Expression, Condition3);
+            Expression.New(typeof(GroupByEffectiveDate1));
 
 
-            
+
+
+
+
+            var gr1 = Expression.Call(typeof(Queryable), "Select", new Type[] { gr.ElementType }, gr.Expression, Condition3);
+
+
+
             return query;
         }
     }
