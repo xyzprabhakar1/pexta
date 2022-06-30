@@ -27,15 +27,12 @@ namespace HRMS.Controllers
             Dictionary<uint, string> Departmentlst = new Dictionary<uint, string>();
             Dictionary<uint, string> Locationlst = new Dictionary<uint, string>();
             return _serEmployee.GetBasicDetail(CurrentDt, false, Departmentlst, Locationlst, true);
-            var tempData = _serEmployee.GetBasicDetail(CurrentDt, false, Departmentlst, Locationlst, true).ToList();
-            return tempData;
         }
         [HttpPost]
         [Route("test")]
         public IEnumerable<tblEmpLocation> test()
         {
-            
-            return LinqHelper.CurrentData(_hRMSContext.tblEmpLocation, "EffectiveDt");
+            return LinqHelper.CurrentData(_hRMSContext.tblEmpLocation, p=>p.EmpId, p=>new {p.EffectiveDt,p.EmpLocationId });
         }
         [HttpPost]
         [Route("test1")]

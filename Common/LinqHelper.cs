@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-    public class LinqHelper
+    public static class LinqHelper
     {
         public static IQueryable<T> DataSorting<T>(IQueryable<T> source, string sortExpression, string sortDirection)
         {
@@ -22,81 +22,150 @@ namespace Common
             Type[] types = new Type[2];
             types[0] = typeof(T);
             types[1] = pi.PropertyType;
-
             Expression expr = Expression.Call(typeof(Queryable), sortingDir, types, source.Expression, Expression.Lambda(Expression.Property(param, sortExpression), param));
             IQueryable<T> query = source.AsQueryable().Provider.CreateQuery<T>(expr);
             return query;
         }
 
-        private class GroupByEffectiveDate1
+        public static IQueryable<T> DataFilter<T>(IQueryable<T> source, DataTableParameters dtp)
         {
-            public uint sno { get; set; }
-            public uint ?Id { get; set; }
-            public DateTime EffectiveDt { get; set; }
-        }
-
-        
-        public static IQueryable<T> CurrentData<T>(IQueryable<T> source,string GroupColumnName= "EmpId", string DateColumnName= "EffectiveDt") where T : class
-        {
-            
-            DateTime CurrentDate=DateTime.Now;
-            Type classType = typeof(T);
-            PropertyInfo? pi_EffectiveDt_ = classType.GetProperty(DateColumnName);
-            PropertyInfo? pi_GroupBy_ = classType.GetProperty(GroupColumnName);
-            if (pi_EffectiveDt_ == null)
-            {
-                throw new Exception("Invalid column Name");
+            if (!string.IsNullOrEmpty(dtp?.search?.value))
+            { 
             }
-            if (pi_GroupBy_ == null)
-            {
-                throw new Exception("Invalid column Name");
-            }
-            PropertyInfo pi_EffectiveDt = pi_EffectiveDt_;
-            PropertyInfo pi_GroupBy = pi_GroupBy_;
-
-            PropertyInfo? pi_IsActive = classType.GetProperty("IsActive");
-            PropertyInfo? pi_IsDeleted= classType.GetProperty("IsDeleted");
-            ParameterExpression param = Expression.Parameter(classType, "t");
-
-            MemberExpression EffectiveDt_ = Expression.Property(param, DateColumnName);            
-            MemberExpression GroupBy_ = Expression.Property(param, GroupColumnName);
-            
-            var CurrentDt_ = Expression.Constant(CurrentDate, typeof(DateTime));
-            var tempbool_ = Expression.Constant(true, typeof(bool));
-            Expression.LessThan(EffectiveDt_, CurrentDt_);
-            MemberExpression? IsActive_ = pi_IsActive == null ? null : Expression.Property(param, "IsActive");
-            MemberExpression? IsDeleted_ = pi_IsDeleted == null ? null : Expression.Property(param, "IsDeleted");
-
-            var Condition1 =
-            ((IsActive_ != null && IsDeleted_ != null) ? Expression.Lambda<Func<T, bool>>(Expression.AndAlso(Expression.AndAlso(Expression.LessThan(EffectiveDt_, CurrentDt_),Expression.Not(IsDeleted_)), IsActive_), new ParameterExpression[] { param }):
-            (IsActive_ != null && IsDeleted_ == null)? Expression.Lambda<Func<T, bool>>(Expression.AndAlso(Expression.LessThan(EffectiveDt_, CurrentDt_),IsActive_), new ParameterExpression[] { param }) :
-            (IsActive_ == null && IsDeleted_ != null) ? Expression.Lambda<Func<T, bool>>(Expression.AndAlso(Expression.LessThan(EffectiveDt_, CurrentDt_),Expression.Not(IsDeleted_)), new ParameterExpression[] { param }) :
-            Expression.Lambda<Func<T, bool>>(Expression.LessThan(EffectiveDt_, CurrentDt_), new ParameterExpression[] { param }));
-
-            //Expression expr = Expression.Call(typeof(Queryable), "Where", new Type[] { source.ElementType },  source.Expression, Condition1);
-            //IQueryable<T> query = source.AsQueryable().Provider.CreateQuery<T>(expr);
-            IQueryable <T> query = source.Where(Condition1);
-
-            //IQueryable<GroupByEffectiveDate1> query1 = query.Select();
-            var Condition2 = Expression.Lambda<Func<T, uint>>(GroupBy_);
-            var Condition3 = Expression.Lambda<Func<T,DateTime>>(EffectiveDt_);
-            var gr = query.GroupBy(Condition2);
-            
-            ParameterExpression param1 = Expression.Parameter(typeof(IGrouping<uint,T>), "p");
-            MemberExpression p1 = Expression.Property(param1, "Key");
-            var expr = Expression.Call(typeof(Queryable), "Max", new Type[] { source.ElementType },  source.Expression, Condition3);
-            Expression.New(typeof(GroupByEffectiveDate1));
-
-
-
-
-
-
-            var gr1 = Expression.Call(typeof(Queryable), "Select", new Type[] { gr.ElementType }, gr.Expression, Condition3);
-
-
-
+                string sortingDir = string.Empty;
+            if (sortDirection.ToUpper().Trim() == "ASC")
+                sortingDir = "OrderBy";
+            else if (sortDirection.ToUpper().Trim() == "DESC")
+                sortingDir = "OrderByDescending";
+            ParameterExpression param = Expression.Parameter(typeof(T), sortExpression);
+            PropertyInfo pi = typeof(T).GetProperty(sortExpression);
+            Type[] types = new Type[2];
+            types[0] = typeof(T);
+            types[1] = pi.PropertyType;
+            Expression expr = Expression.Call(typeof(Queryable), sortingDir, types, source.Expression, Expression.Lambda(Expression.Property(param, sortExpression), param));
+            IQueryable<T> query = source.AsQueryable().Provider.CreateQuery<T>(expr);
             return query;
         }
+
+        public static IQueryable<T> CurrentData<T>(
+            this IQueryable<T> source,
+            string distinctPropName,
+            string maxPropName)
+        {
+            var entityParam = Expression.Parameter(typeof(T), "e");
+            var distinctBy = Expression.Lambda(MakePropPath(entityParam, distinctPropName), entityParam);
+            var maxBy = Expression.Lambda(MakePropPath(entityParam, maxPropName), entityParam);
+            var queryExpression = Expression.Call(typeof(LinqHelper), nameof(LinqHelper.CurrentData),
+                new[] { typeof(T), distinctBy.Body.Type, maxBy.Body.Type },
+                Expression.Constant(source),
+                Expression.Quote(distinctBy),
+                Expression.Quote(maxBy));
+            var executionLambda = Expression.Lambda<Func<IQueryable<T>>>(queryExpression);
+            return executionLambda.Compile()();
+        }
+
+        public static IQueryable<T> CurrentData<T, TKey, TMax>(
+            this IQueryable<T> source,
+            Expression<Func<T, TKey>> distinctBy,
+            Expression<Func<T, TMax>> maxBy)
+        {
+            var distinctQuery = source.Select(distinctBy).Distinct();
+
+            var distinctParam = Expression.Parameter(typeof(TKey), "d");
+            var entityParam = distinctBy.Parameters[0];
+
+            var mapping = MapMembers(distinctBy.Body, distinctParam).ToList();
+
+            var orderParam = maxBy.Parameters[0];
+            var oderMapping = CollectMembers(maxBy.Body).ToList();
+
+            var whereExpr = mapping.Select(t => Expression.Equal(t.Item1, t.Item2))
+                .Aggregate(Expression.AndAlso);
+            var whereLambda = Expression.Lambda(whereExpr, entityParam);
+
+            // d => query.Where(x => d.distinctBy == x.distinctBy).Take(1)
+            Expression selectExpression = Expression.Call(typeof(Queryable), nameof(Queryable.Where), new[] { typeof(T) },
+                source.Expression,
+                whereLambda);
+
+            // prepare OrderByPart
+            for (int i = 0; i < oderMapping.Count; i++)
+            {
+                var orderMethod = i == 0 ? nameof(Queryable.OrderByDescending) : nameof(Queryable.ThenByDescending);
+
+                var orderItem = oderMapping[i];
+                selectExpression = Expression.Call(typeof(Queryable), orderMethod, new[] { typeof(T), orderItem.Type },
+                    selectExpression, Expression.Lambda(orderItem, orderParam));
+            }
+
+            // Take(1)
+            selectExpression = Expression.Call(typeof(Queryable), nameof(Queryable.Take), new[] { typeof(T) },
+                selectExpression,
+                Expression.Constant(1));
+
+            var selectManySelector =
+                Expression.Lambda<Func<TKey, IEnumerable<T>>>(selectExpression, distinctParam);
+
+            var selectManyQuery = Expression.Call(typeof(Queryable), nameof(Queryable.SelectMany),
+                new[] { typeof(TKey), typeof(T) }, distinctQuery.Expression, selectManySelector);
+
+            return source.Provider.CreateQuery<T>(selectManyQuery);
+        }
+
+        static Expression MakePropPath(Expression objExpression, string path)
+        {
+            return path.Split('.').Aggregate(objExpression, Expression.PropertyOrField);
+        }
+
+        private static IEnumerable<Tuple<Expression, Expression>> MapMembers(Expression expr, Expression projectionPath)
+        {
+            switch (expr.NodeType)
+            {
+                case ExpressionType.New:
+                    {
+                        var ne = (NewExpression)expr;
+
+                        for (int i = 0; i < ne.Arguments.Count; i++)
+                        {
+                            foreach (var e in MapMembers(ne.Arguments[i], Expression.MakeMemberAccess(projectionPath, ne.Members[i])))
+                            {
+                                yield return e;
+                            }
+                        }
+                        break;
+                    }
+
+                default:
+                    yield return Tuple.Create(projectionPath, expr);
+                    break;
+            }
+        }
+
+        private static IEnumerable<Expression> CollectMembers(Expression expr)
+        {
+            switch (expr.NodeType)
+            {
+                case ExpressionType.New:
+                    {
+                        var ne = (NewExpression)expr;
+
+                        for (int i = 0; i < ne.Arguments.Count; i++)
+                        {
+                            yield return ne.Arguments[i];
+                        }
+                        break;
+                    }
+
+                default:
+                    yield return expr;
+                    break;
+            }
+        }
+
     }
+
+    //public static class QueryableExtensions
+    //{
+        
+    //}
 }
