@@ -33,11 +33,11 @@ namespace Common.Enums
     {
         [Application(DisplayOrder: 0, Name: "None", Description: "", Icon: "nav-icon fas fa-calculator", RouterUrl: "")]
         None = 1,
-        [Application( DisplayOrder: 1, Name: "HRMS", Description: "", Icon: "nav-icon fas fa-calculator", RouterUrl: "/hrms")]
+        [Application( DisplayOrder: 1, Name: "HRMS", Description: "", Icon: "nav-icon fas fa-calculator", RouterUrl: "hrms")]
         HRMS = 11,
-        [Application(DisplayOrder: 2, Name: "Asset Management", Description: "", Icon: "nav-icon fas fa-mobile", RouterUrl: "/asset-management")]
+        [Application(DisplayOrder: 2, Name: "Asset Management", Description: "", Icon: "nav-icon fas fa-mobile", RouterUrl: "asset-management")]
         AssetManagement = 12,
-        [Application(DisplayOrder: 3, Name: "Time Sheeting", Description: "", Icon: "nav-icon fas fa-calendar", RouterUrl: "/ets")]
+        [Application(DisplayOrder: 3, Name: "Time Sheeting", Description: "", Icon: "nav-icon fas fa-calendar", RouterUrl: "ets")]
         ETS = 13,
         [Application(DisplayOrder: 4, Name: "Point of Sale", Description: "", Icon: "nav-icon fas fa-calendar", RouterUrl: "pos")]
         POS = 14,

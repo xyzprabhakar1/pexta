@@ -4,8 +4,8 @@ namespace HRMS.Database
 {
     public class HRMSContext : DbContext
     {
-        //add-migration -s projApi 31_Oct_20211 -Context projContext.DB.HRMS.HRMSContext
-        //update-database -s projApi -Context projContext.DB.HRMS.HRMSContext
+        //add-migration -s HRMS EmployeeMaster -Context HRMS.Database.HRMSContext
+        //update-database -s HRMS -Context HRMS.Database.HRMSContext
         public HRMSContext(DbContextOptions<HRMSContext> options) : base(options)
         {
 

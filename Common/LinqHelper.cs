@@ -43,32 +43,9 @@ namespace Common
                     .Cast<Expression>()
                     .Aggregate(Expression.OrElse), param1);
 
-                var filterCondtion1 = Expression.Lambda(
-                    typeof(T).GetProperties().Where(p => (p.GetCustomAttribute<IsFilterAllowed>()?.IsAllowed ?? false) && p.PropertyType != typeof(DateTime))
-                    .Select(p => Expression.Equal(MakePropPath(param1, p.Name), srv))
-                    .Aggregate(Expression.OrElse), param1);
-
-                var filterCondtion2 = Expression.Lambda(
-                    Expression.OrElse(
-                        Expression.OrElse(
-                            Expression.OrElse(
-                                Expression.OrElse( 
-                                    Expression.Equal(MakePropPath(param1, "Code"), srv),
-                                    Expression.Equal(MakePropPath(param1, "EmpName"), srv))
-                               ,Expression.Equal(MakePropPath(param1, "OfficialEmail"), srv))
-                        ,Expression.Equal(MakePropPath(param1, "OfficialContactNo"), srv))
-                        ,Expression.Equal(MakePropPath(param1, "DepartmentName"), srv))
-                    , param1);
-                var filterCondition3 = Expression.Lambda(Expression.Equal(MakePropPath(param1, "DepartmentName"), srv),param1);
-                Console.WriteLine(filterCondtion1);
-                Console.WriteLine(filterCondtion2);
-                Console.WriteLine(filterCondition3);
-
-                //Console.WriteLine(filterCondtion1);
                 selectExpression = Expression.Call(typeof(Queryable), nameof(Queryable.Where), new[] { typeof(T) },
-                selectExpression, filterCondition3);
-                //Console.WriteLine(filterCondtion2);
-                //Console.WriteLine(selectExpression);
+                selectExpression, filterCondtion);
+                
             }
             selectExpression = PerformOrderBy(selectExpression);
             
