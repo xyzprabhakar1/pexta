@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
 
   public loginForm !: FormGroup;
   public baseUrl: string;
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private router:Router) {
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, @Inject('API_BASE_URL') baseUrl: string, private router:Router) {
     this.baseUrl = baseUrl;
   }
 
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     })
   }
   login() {
-    this.http.post<any>(this.baseUrl + 'login1', this.loginForm.value)
+    this.http.post<any>(this.baseUrl + 'api/user/login', this.loginForm.value)
       .subscribe(res => {
         this.router.navigate(['dashboard'])
       }, err => {
