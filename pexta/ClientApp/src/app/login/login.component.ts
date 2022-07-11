@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder } from "@angular/forms"
 import { HttpClient } from "@angular/common/http"
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ export class LoginComponent implements OnInit {
 
   public loginForm !: FormGroup;
   public baseUrl: string;
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private router:Router) {
     this.baseUrl = baseUrl;
   }
 
@@ -22,7 +23,13 @@ export class LoginComponent implements OnInit {
     })
   }
   login() {
-    this.http.post<any>(this.baseUrl + 'user/login', this.loginForm.value);
+    this.http.post<any>(this.baseUrl + 'login1', this.loginForm.value)
+      .subscribe(res => {
+        this.router.navigate(['dashboard'])
+      }, err => {
+        alert("something went wrong");
+      }
+      );
   }
 
 }

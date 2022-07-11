@@ -16,7 +16,7 @@ namespace pexta.Controllers
 
 
         [HttpPost]
-        [Route("login")]
+        [Route("login1")]
         //[ValidateAntiForgeryToken]
         public mdlLoginResponse login(mdlLoginRequest mdl)
         {
@@ -30,6 +30,17 @@ namespace pexta.Controllers
             {
                 res.IsSuccess = true;
             }
+            return res;
+        }
+        [Route("login")]
+        public mdlLoginResponse login()
+        {
+            mdlLoginResponse res = new mdlLoginResponse()
+            {
+                error = new Common.CustomModels.Error(),
+                IsSuccess = false,
+                token = String.Empty
+            };
             return res;
         }
 
