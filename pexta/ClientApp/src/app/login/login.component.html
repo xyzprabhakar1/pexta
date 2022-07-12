@@ -10,18 +10,22 @@
           <h1>Login</h1>
           <h6>please enter username or password</h6>
         </div>
-        <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <div *ngIf="showError" class="alert alert-danger" role="alert">
+          {{errorMessage}}
+        </div>
+        <form [formGroup]="loginForm" autocomplete="off" novalidate  (ngSubmit)="login()">
           <!-- Username Input-->
           <div class="form-outline mb-4">
             <label class="form-label" for="form1Example13">User name</label>
             <input formControlName="userName" type="text" id="form1Example13" class="form-control form-control-lg" />
-
+            <span><em  *ngIf="validateControl('userName') && hasError('userName', 'required')">Username is required</em></span>
           </div>
 
           <!-- Password input -->
           <div class="form-outline mb-4">
             <label class="form-label" for="form1Example23">Password</label>
             <input formControlName="password" type="password" id="form1Example23" class="form-control form-control-lg" />
+            <span><em  *ngIf="validateControl('password') && hasError('password', 'required')">Password is required</em></span>
           </div>
 
           <div class="d-flex justify-content-around align-items-center mb-4">
@@ -34,7 +38,7 @@
           </div>
 
           <!-- Submit button -->
-          <button type="submit" class="btn btn-primary btn-lg w-100">Sign in</button>
+          <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="!loginForm.valid">Sign in</button>
           <div class="divider d-flex align-items-center my-4">
             <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
           </div>

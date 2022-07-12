@@ -22,6 +22,11 @@ namespace pextaApi.Controllers
             {
                 res.IsSuccess = true;
             }
+            else
+            {
+                res.error.Message = "Invalid Username or password";
+            }
+
             return res;
         }
     }
