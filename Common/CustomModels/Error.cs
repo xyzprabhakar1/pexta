@@ -9,7 +9,9 @@ namespace Common.CustomModels
 {
     public class Error
     {
-        public enmError ErrorId { get; set; }
-        public string Message { get; set; }
+        private enmError _ErrorId;
+        private string _ErrorMessage;
+        public enmError ErrorId { get { return _ErrorId; } set { _ErrorId = value; _ErrorMessage = _ErrorId.GetDescription(); } }
+        public string Message { get { return _ErrorMessage; } set { _ErrorMessage = value; } }
     }
 }

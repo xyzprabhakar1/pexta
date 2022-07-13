@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Common.Database
 {
-    public class MasterContext : DbContext
+    public class CommonContext : DbContext 
     {
-        public MasterContext(DbContextOptions<MasterContext> options) : base(options)
+        public CommonContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -36,6 +36,26 @@ namespace Common.Database
         public DbSet<tblState> tblState { get; set; }
         public DbSet<tblBankMaster> tblBankMaster { get; set; }
         public DbSet<tblCurrency> tblCurrency { get; set; }
+        #endregion
+
+
+        #region ********************** User Master **********************
+        public DbSet<tblUsersMaster> tblUsersMaster { get; set; }
+        public DbSet<tblRoleMaster> tblRoleMaster { get; set; }
+        public DbSet<tblRoleClaim> tblRoleClaim { get; set; }
+        public DbSet<tblUserClaim> tblUserClaim { get; set; }
+        public DbSet<tblUserRole> tblUserRole { get; set; }
+        public DbSet<tblUserAllClaim> tblUserAllClaim { get; set; }
+        public DbSet<tblUserOTP> tblUserOTP { get; set; }
+        public DbSet<tblUserLoginLog> tblUserLoginLog { get; set; }
+        #endregion
+
+        #region ********************** User Permission **********************
+        public DbSet<tblUserOrganisationPermission> tblUserOrganisationPermission { get; set; }
+        public DbSet<tblUserCompanyPermission> tblUserCompanyPermission { get; set; }
+        public DbSet<tblUserZonePermission> tblUserZonePermission { get; set; }
+        public DbSet<tblUserLocationPermission> tblUserLocationPermission { get; set; }
+        public DbSet<tblUserAllLocationPermission> tblUserAllLocationPermission { get; set; }        
         #endregion
 
 
