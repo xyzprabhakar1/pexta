@@ -36,6 +36,7 @@ namespace Common.Database
         public DbSet<tblState> tblState { get; set; }
         public DbSet<tblBankMaster> tblBankMaster { get; set; }
         public DbSet<tblCurrency> tblCurrency { get; set; }
+        public DbSet<tbl_app_setting> tbl_app_setting { get; set; }
         #endregion
 
 
@@ -48,6 +49,7 @@ namespace Common.Database
         public DbSet<tblUserAllClaim> tblUserAllClaim { get; set; }
         public DbSet<tblUserOTP> tblUserOTP { get; set; }
         public DbSet<tblUserLoginLog> tblUserLoginLog { get; set; }
+        
         #endregion
 
         #region ********************** User Permission **********************
@@ -55,7 +57,9 @@ namespace Common.Database
         public DbSet<tblUserCompanyPermission> tblUserCompanyPermission { get; set; }
         public DbSet<tblUserZonePermission> tblUserZonePermission { get; set; }
         public DbSet<tblUserLocationPermission> tblUserLocationPermission { get; set; }
-        public DbSet<tblUserAllLocationPermission> tblUserAllLocationPermission { get; set; }        
+        public DbSet<tblUserAllLocationPermission> tblUserAllLocationPermission { get; set; }
+        
+        
         #endregion
 
 

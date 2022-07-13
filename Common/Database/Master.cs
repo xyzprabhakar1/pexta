@@ -60,4 +60,18 @@ namespace Common.Database
         public string Symbol { get; set; }
         public bool IsActive { get; set; }
     }
+    public class tbl_app_setting : d_Modified
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public uint pkid_setting { get; set; }  // primary key  must be public!
+        [MaxLength(64)]
+        public string GroupName { get; set; }
+        [MaxLength(64)]
+        public string AppSettingKey { get; set; }
+        [MaxLength(2048)]
+        public string AppSettingValue { get; set; }
+        public bool IsActive { get; set; }
+        
+    }
 }

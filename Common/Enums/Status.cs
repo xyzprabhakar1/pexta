@@ -20,4 +20,13 @@ namespace Common.Enums
         Update=2,
         Delete=3,
     }
+
+    public enum enmMessageType
+    {
+        None = 0,
+        Success = 1,
+        Error = 2,
+        Warning = 3,
+        Info = 4,
+    }
 }

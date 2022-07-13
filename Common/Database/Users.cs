@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -102,18 +103,15 @@ namespace Common.Database
         public string PermissionType { get; set; }
     }
 
+    [Index(nameof(UserId))]
     public class tblUserOTP
     {
         [Key]
         [MaxLength(256)]
         public string SecurityStamp { get; set; }
         public string DescId { get; set; }
-        [ForeignKey("tblUsersMaster")] // Foreign Key here
         public ulong? UserId { get; set; }
-        public tblUsersMaster tblUsersMaster { get; set; }
-        [MaxLength(256)]
-        public string TempUserId { get; set; }
-        public string OTP { get; set; }
+        public string OTP { get; set; }        
         public DateTime EffectiveFromDt { get; set; } = DateTime.Now;
         public DateTime EffectiveToDt { get; set; } = DateTime.Now.AddMinutes(30);
     }

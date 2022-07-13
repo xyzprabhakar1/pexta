@@ -31,14 +31,12 @@ namespace Common.Enums
         InvalidID,
         [Description("Invalid Organization !!!")]
         InvalidOrganization,
-        [Description("Invalid UserId !!!")]
-        InvalidUserID,
+        [Description("Invalid User !!!")]
+        InvalidUser,
         [Description("Invalid Applicable date !!!")]
         InvalidApplicableDt,
         [Description("Invalid Data !!!")]
-        InvalidData,
-        [Description("Invalid User or Password !!!")]
-        InvalidUserOrPassword,
+        InvalidData,        
         [Description("Invalid Operation !!!")]
         InvalidOperation,
         [Description("User Blocked !!!")]
