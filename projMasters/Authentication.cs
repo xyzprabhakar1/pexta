@@ -1,4 +1,6 @@
-﻿using projMasters.Database;
+﻿using Common;
+using Common.Enums;
+using projMasters.Database;
 using projMasters.Models;
 
 namespace projMasters
@@ -6,13 +8,15 @@ namespace projMasters
     public class Auth
     {
         private readonly MasterContext _masterContext;
-        public Auth(MasterContext masterContext)
+        private readonly ISettings _setting;
+        public Auth(MasterContext masterContext,ISettings setting)
         {
             _masterContext = masterContext;
+            _setting = setting;
         }
         public mdlLoginResponse Login(mdlLoginRequest req)
         {
-            mdlLoginResponse res = new mdlLoginResponse() { normalizedName = String.Empty, error = new Common.CustomModels.Error() };
+            mdlLoginResponse res = new mdlLoginResponse() { messageType=enmMessageType.Error,normalizedName = String.Empty, error = new Common.CustomModels.Error() };
             var tempData=_masterContext.tblUsersMaster.Where(p => p.UserName == req.userName && p.OrgId== req.orgId ).FirstOrDefault();
             if (tempData==null)
             {
@@ -42,7 +46,7 @@ namespace projMasters
                 res.error.ErrorId = Common.Enums.enmError.InvalidUserorPassword;
                 return res;
             }
-            res.isSuccess = true;
+            res.messageType = enmMessageType.Success;
 
             return res;
 
@@ -61,11 +65,11 @@ namespace projMasters
             }
             if (is_logged_blocked == 1)
             {
-                bool.TryParse(_IsrvSettings.GetSettings("UserSetting", "AllowBlockonFail"), out AllowBlockonFail);
+                bool.TryParse(_setting.GetSettings("UserSetting", "AllowBlockonFail"), out AllowBlockonFail);
                 if (AllowBlockonFail)
                 {
-                    int.TryParse(_IsrvSettings.GetSettings("UserSetting", "BlockUserAfterLoginFailAttempets"), out BlockUserAfterLoginFailAttempets);
-                    int.TryParse(_IsrvSettings.GetSettings("UserSetting", "BlockUserAfterLoginFailAttempetsForTime"), out BlockUserAfterLoginFailAttempetsForTime);
+                    int.TryParse(_setting.GetSettings("UserSetting", "BlockUserAfterLoginFailAttempets"), out BlockUserAfterLoginFailAttempets);
+                    int.TryParse(_setting.GetSettings("UserSetting", "BlockUserAfterLoginFailAttempetsForTime"), out BlockUserAfterLoginFailAttempetsForTime);
                     if (tempData.LoginFailCount >= BlockUserAfterLoginFailAttempets && DateTime.Compare(tempData.LoginFailCountdt, CurrentDate) == 0)
                     {
                         tempData.is_logged_blocked = is_logged_blocked;

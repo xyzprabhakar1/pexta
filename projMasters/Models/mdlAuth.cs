@@ -14,6 +14,8 @@ namespace projMasters.Models
         public string password { get; set; }
         public string orgCode { get; set; }
         public uint orgId { get; set; }
+        public string securityStamp { get; set; }
+        public string otp{ get; set; }
     }
     public class mdlLoginResponse
     {
