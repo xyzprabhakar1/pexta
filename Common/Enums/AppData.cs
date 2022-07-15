@@ -125,7 +125,11 @@ namespace Common.Enums
             DisplayOrder: 1, Name: "Religion", Description: "Religion", Icon: "far fa-circle nav-icon", RouterUrl: "religion")]
         HRMS_Religion = 1111,
     }
-    
+
+    public enum enmAdditionalClaim
+    {
+        
+    }
 
 
     public interface IDocuments
@@ -320,13 +324,13 @@ namespace Common.Enums
         public bool HaveApproval { get { return DocumentType.HasFlag(enmDocumentType.Approval); } }
         public bool HaveDelete { get { return DocumentType.HasFlag(enmDocumentType.Delete); } }
         public bool HaveReport { get { return DocumentType.HasFlag(enmDocumentType.Report); } }
-        public bool PendingReport { get { return DocumentType.HasFlag(enmDocumentType.PendingReport); } }
+        public bool HavePendingReport { get { return DocumentType.HasFlag(enmDocumentType.PendingReport); } }
         public bool HaveDisplayMenu { get { return DocumentType.HasFlag(enmDocumentType.DisplayMenu); } }
         public bool HaveDetailView { get { return DocumentType.HasFlag(enmDocumentType.DetailView); } }
     }
 
 
-
+    
 
 
 

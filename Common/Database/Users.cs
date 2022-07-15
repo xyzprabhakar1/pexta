@@ -50,6 +50,8 @@ namespace Common.Database
         public bool IsActive { get; set; }
     }
 
+    
+
     public class tblRoleClaim : d_Modified
     {
         [Key]
@@ -59,7 +61,8 @@ namespace Common.Database
         public uint? RoleId { get; set; }
         public tblRoleMaster tblRoleMaster { get; set; }
         public enmDocumentMaster DocumentMaster { get; set; }
-        public enmDocumentType PermissionType { get; set; }
+        public enmDocumentType DocumentType { get; set; }        
+        public enmAdditionalClaim AdditionalClaim { get; set; }
         public bool IsDeleted { get; set; }
     }
 
@@ -72,11 +75,11 @@ namespace Common.Database
         public ulong? UserId { get; set; }
         public tblUsersMaster tblUsersMaster { get; set; }
         public enmDocumentMaster DocumentMaster { get; set; }
-        public enmDocumentType PermissionType { get; set; }
+        public enmDocumentType DocumentType { get; set; }
         public bool IsDeleted { get; set; }
     }
 
-    public class tblUserRole : d_Modified
+    public class tblUserRole : d_CreatedModified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -100,7 +103,8 @@ namespace Common.Database
         public tblUsersMaster tblUsersMaster { get; set; }
         public enmDocumentMaster DocumentMaster { get; set; }
         public enmDocumentType DocumentType { get; set; }
-        public string PermissionType { get; set; }
+        public enmAdditionalClaim AdditionalClaim { get; set; }
+
     }
 
     [Index(nameof(UserId))]
