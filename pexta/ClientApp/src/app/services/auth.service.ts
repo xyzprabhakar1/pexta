@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from "@angular/common/http"
 import { mdlLoginRequest, mdlLoginResponse } from './../interface/auth';
 import { Observable } from 'rxjs';
+import { mdlReturnData } from '../interface/common';
 //import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Injectable()
@@ -31,6 +32,10 @@ export class AuthService {
 
   doLogin(body: mdlLoginRequest): Observable<mdlLoginResponse>{
     return this.http.post<mdlLoginResponse>(this.baseUrl + 'api/user/login', body)
+  }
+
+  getCaptcha(UserId: number, width: number, height: number): Observable<mdlReturnData> {
+    return this.http.get<mdlReturnData>(this.baseUrl + 'api/user/GetCaptcha/' + UserId + "/" + width + "/" + height);
   }
 
 

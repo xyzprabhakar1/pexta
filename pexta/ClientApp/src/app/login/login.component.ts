@@ -17,6 +17,8 @@ export class LoginComponent implements OnInit {
   errorMessage: string = '';
   showError: boolean;
 
+  private isImageLoading: boolean;
+
   constructor(private formBuilder: FormBuilder, private http: HttpClient,
     @Inject('API_BASE_URL') baseUrl: string, private router: Router, private route: ActivatedRoute,
     private authService: AuthService, 
@@ -24,6 +26,8 @@ export class LoginComponent implements OnInit {
     this.baseUrl = baseUrl;
     this.showError = false;
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.isImageLoading = true;
+    
   }
 
   ngOnInit(): void {
@@ -31,8 +35,26 @@ export class LoginComponent implements OnInit {
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]]
     })
-    
+    this.getCaptcha();
   }
+
+  getCaptcha() {
+    this.isImageLoading = true;
+    this.authService.getCaptcha(0, 50, 20).subscribe(res => {
+      if (res.messageType == enmMessageType.Success) {
+        localStorage.setItem("token", res.token);
+        this.isImageLoading = false;    
+      }
+      else {
+        this.errorMessage = res.error.message;
+        this.showError = true;
+      }
+    }, err => {
+      this.errorMessage = err.message;
+      this.showError = true;
+    });
+  }
+
   validateControl(controlName: string) {
     return this.loginForm.get(controlName)?.invalid && this.loginForm.get(controlName)?.touched
   }

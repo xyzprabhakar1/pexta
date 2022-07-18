@@ -44,6 +44,7 @@ namespace pextaApi.Controllers
         }
 
         [HttpGet]
+        [Route("GetCaptcha/{UserId}/{Width}/{Height}")]
         public IActionResult GetCaptcha(uint UserId,int Width,int Height)
         {
             return Ok( GenrateCaptcha(UserId, Width, Height));
