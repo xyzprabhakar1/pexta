@@ -128,7 +128,7 @@ namespace Common.Enums
 
     public enum enmAdditionalClaim
     {
-        
+        None=0,
     }
 
 

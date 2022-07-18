@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Common.Database;
+using Common.CustomModels;
 
 namespace projMasters
 {
@@ -177,9 +178,10 @@ namespace projMasters
              select LocationId from tblUserLocationPermission Where UserId={UserId} and IsDeleted=0 )t;" );
 
         }
+
         public List<Document> GetUserDocuments(ulong UserId, bool OnlyDisplayMenu)
         {
-            IEnumerable<tblUserAllClaim> alluserClaims = _masterContext.tblUserAllClaim.Where(p => p.UserId == UserId);            
+            IEnumerable<tblUserAllClaim> alluserClaims = _masterContext.tblUserAllClaim.Where(p => p.UserId == UserId && p.AdditionalClaim == enmAdditionalClaim.None);            
             var tempData = alluserClaims.Select(p => p.DocumentMaster).Distinct();
             List<Document> documents = new List<Document>();
             foreach (var d in tempData)
@@ -228,56 +230,190 @@ namespace projMasters
             return documents;
         }
 
+        public List<enmAdditionalClaim> GetUserAdditionClaim(ulong UserId)
+        {
+            return _masterContext.tblUserAllClaim.Where(p => p.UserId == UserId && p.AdditionalClaim != enmAdditionalClaim.None).Select(q=>q.AdditionalClaim).ToList();
+        }
+
+        public bool SetRoleDocument(mdlRoleMaster roleDocument, uint CreatedBy)
+        {
+            DateTime dateTime = DateTime.Now;
+            _masterContext.Database.ExecuteSqlInterpolated($@"update tblRoleClaim set isdeleted=1,ModifiedBy={CreatedBy},ModifiedDt={dateTime.ToString("yyyy-MM-dd")} Where  roleid={roleDocument.roleId} and isdeleted=0;");
+
+            StringBuilder sb = new StringBuilder("");
+            sb.Append("insert into tblRoleClaim(RoleId,DocumentMaster,DocumentType,AdditionalClaim,IsDeleted,ModifiedDt,ModifiedBy,ModifiedRemarks,CreatedDt,CreatedBy) values ");
+            var tempdata = roleDocument?.roleDocument?.Where(q => q.documentId > 0 || q.additionalClaim>0).
+                Select(p => new { data = string.Concat("(", "'" + roleDocument.roleId + "',", p.documentId, ","+p.permissionType+","+p.additionalClaim+",0,'" + dateTime.ToString("yyyy-MM-dd") + "'," + CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','" + CreatedBy + "'", ")") });
+            sb.AppendFormat(string.Join(",", tempdata) + ";");
+            _masterContext.Database.ExecuteSqlRaw(sb.ToString());
+            _masterContext.SaveChanges();
+            return true;
+        }
 
         #region UserRole
         public List<uint> GetUserRole(ulong UserId)
         {
             return _masterContext.tblUserRole.Where(p => p.UserId == UserId && !p.IsDeleted ).Select(p => p.RoleId??0 ).ToList();
         }
+
         public bool SetUserRole(mdlUserRolesWraper userRoles, ulong CreatedBy)
         {
             DateTime dateTime = DateTime.Now;
 
-            _masterContext.Database.ExecuteSqlInterpolated($@"update tblUserRole set isdeleted=1,ModifiedBy='{CreatedBy}',ModifiedDt='{dateTime.ToString("yyyy-MM-dd")}' Where  UserId={userRoles.userMaster.userId} and isdeleted=0;");
-
-            List<tblUserRole> TobeAdded = new List<tblUserRole>();
-            List<tblUserRole> TobeUpdate = new List<tblUserRole>();
-            //Get Existsing Role
-            var tempData = _masterContext.tblUserRole.Where(p => p.UserId == userRoles.userMaster.userId && !p.IsDeleted);
-            userRoles.userRoles.ForEach(q =>
-            {
-                var innerTemp = tempData.FirstOrDefault(p => p.RoleId == q.roleMaster.roleId);
-                if (innerTemp == null)
-                {
-                    TobeAdded.Add(new tblUserRole()
-                    {
-                        RoleId =  q.roleMaster.roleId,
-                        IsDeleted=false,
-                        ModifiedBy = Convert.ToUInt32( CreatedBy),
-                        ModifiedDt = dateTime,
-                        UserId= userRoles.userMaster.userId,
-                        ModifiedRemarks=String.Empty,
-                    });
-                }
-                else
-                {
-                    if (q.isActive != innerTemp.IsActive)
-                    {
-                        innerTemp.IsActive = q.isActive;
-                        innerTemp.last_modified_by = CreatedBy;
-                        innerTemp.last_modified_date = dateTime;
-                        TobeUpdate.Add(innerTemp);
-                    }
-                }
-
-
-            });
-            _masterContext.tblUserRole.AddRange(TobeAdded);
-            _masterContext.tblUserRole.UpdateRange(TobeAdded);
+            _masterContext.Database.ExecuteSqlInterpolated($@"update tblUserRole set isdeleted=1,ModifiedBy={CreatedBy},ModifiedDt={dateTime.ToString("yyyy-MM-dd")} Where  UserId={userRoles.userMaster.userId} and isdeleted=0;");
+            StringBuilder sb = new StringBuilder("");
+            sb.Append("insert into tblUserRole(UserId,RoleId,IsDeleted,ModifiedDt,ModifiedBy,ModifiedRemarks,CreatedDt,CreatedBy) values ");
+            var tempdata = userRoles?.userRoles?.Select(p => p.roleMaster?.roleId??0).Where(q=>q>0).
+                Select(p=>new {data=string.Concat("(","'"+ userRoles.userMaster.userId + "',",p,",0,'"+ dateTime.ToString("yyyy-MM-dd") + "',"+ CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','"+ CreatedBy + "'", ")")});
+            sb.AppendFormat(string.Join(",", tempdata)+";");
+            _masterContext.Database.ExecuteSqlRaw(sb.ToString());
             _masterContext.SaveChanges();
             return true;
         }
         #endregion
+
+        public List<mdlCommonReturnuintWithParentID> GetUserOrganisation(ulong UserId)
+        {
+            List<mdlCommonReturnuintWithParentID> returnData = new List<mdlCommonReturnuintWithParentID>();
+            returnData.AddRange(
+            _masterContext.tblUserOrganisationPermission.Where(p => p.UserId == UserId && !p.IsDeleted).
+                Select(p => new mdlCommonReturnuintWithParentID { Code = p.tblOrganisation.Code, Name = p.tblOrganisation.Name, IsActive = p.tblOrganisation.IsActive, Id = p.OrgId ?? 0 }
+                ));
+            return returnData;
+        }
+
+        public List<mdlCommonReturnuintWithParentID> GetUserCompany(ulong UserId, uint? OrgId, List<uint> OrgIds)
+        {
+            List<mdlCommonReturnuintWithParentID> returnData = new List<mdlCommonReturnuintWithParentID>();
+            if (OrgId == 0)
+            {
+                return returnData;
+            }
+            var queryData = (from t1 in _masterContext.tblUserOrganisationPermission
+                             join t2 in _masterContext.tblCompanyMaster on t1.OrgId equals t2.OrgId
+                             where !t1.IsDeleted && t1.UserId == UserId && t1.HaveAllCompanyAccess
+                             select new mdlCommonReturnuintWithParentID { ParentId = t2.OrgId ?? 0, Id = t2.CompanyId, Code = t2.Code, Name = t2.Name, IsActive = t2.IsActive }
+                    ).Union(
+                    from t1 in _masterContext.tblCompanyMaster
+                    join t2 in _masterContext.tblUserOrganisationPermission on t1.OrgId equals t2.OrgId
+                    join t3 in _masterContext.tblUserCompanyPermission on t1.CompanyId equals t3.CompanyId
+                    where !t2.IsDeleted && t2.UserId == UserId && !t2.HaveAllCompanyAccess &&
+                    !t3.IsDeleted && t3.UserId == UserId
+                    select new mdlCommonReturnuintWithParentID { ParentId = t1.OrgId ?? 0, Id = t1.CompanyId, Code = t1.Code, Name = t1.Name, IsActive = t1.IsActive }
+                    );
+            if (OrgId > 0)
+            {
+                returnData.AddRange(queryData.Where(p => p.ParentId == OrgId));
+            }
+            else if ((OrgIds?.Count ?? 0) > 0)
+            {
+                returnData.AddRange(queryData.Where(p => OrgIds.Contains(p.ParentId)));
+            }
+            else
+            {
+                returnData.AddRange(queryData);
+            }
+
+            return returnData;
+        }
+
+        public List<mdlCommonReturnuintWithParentID> GetUserZone(ulong UserId, uint? OrgId, uint? CompanyId, List<uint> CompanyIds)
+        {
+            List<mdlCommonReturnuintWithParentID> returnData = new List<mdlCommonReturnuintWithParentID>();
+            if (CompanyId == 0)
+            {
+                return returnData;
+            }
+            var QuerableData = (from t1 in _masterContext.tblUserOrganisationPermission
+                                join t2 in _masterContext.tblCompanyMaster on t1.OrgId equals t2.OrgId
+                                join t3 in _masterContext.tblZoneMaster on t2.CompanyId equals t3.CompanyId
+                                where !t1.IsDeleted && t1.UserId == UserId && t1.HaveAllCompanyAccess
+                                select new { OrgId = t3.OrgId, ParentId = t3.CompanyId ?? 0, Id = t3.ZoneId, Code = string.Empty, Name = t3.Name, IsActive = t3.IsActive }
+                    ).Union(
+                         from t1 in _masterContext.tblUserOrganisationPermission
+                         join t2 in _masterContext.tblCompanyMaster on t1.OrgId equals t2.OrgId
+                         join t3 in _masterContext.tblZoneMaster on t2.CompanyId equals t3.CompanyId
+                         join t4 in _masterContext.tblUserCompanyPermission on t2.CompanyId equals t4.CompanyId
+                         where !t1.IsDeleted && t1.UserId == UserId && !t1.HaveAllCompanyAccess
+                         && t4.UserId == UserId && !t4.IsDeleted && t4.HaveAllZoneAccess
+                         select new { OrgId = t3.OrgId, ParentId = t3.CompanyId ?? 0, Id = t3.ZoneId, Code = string.Empty, Name = t3.Name, IsActive = t3.IsActive }
+                     )
+                    .Union(
+                    from t1 in _masterContext.tblUserOrganisationPermission
+                    join t2 in _masterContext.tblCompanyMaster on t1.OrgId equals t2.OrgId
+                    join t3 in _masterContext.tblZoneMaster on t2.CompanyId equals t3.CompanyId
+                    join t4 in _masterContext.tblUserCompanyPermission on t2.CompanyId equals t4.CompanyId
+                    join t5 in _masterContext.tblUserZonePermission on t3.ZoneId equals t5.ZoneId
+                    where !t1.IsDeleted && t1.UserId == UserId && !t1.HaveAllCompanyAccess
+                    && t4.UserId == UserId && !t4.IsDeleted && !t4.HaveAllZoneAccess
+                    && t5.UserId == UserId && !t5.IsDeleted
+                    select new { OrgId = t3.OrgId, ParentId = t3.CompanyId ?? 0, Id = t3.ZoneId, Code = string.Empty, Name = t3.Name, IsActive = t3.IsActive }
+                    );
+            if (CompanyId > 0)
+            {
+                returnData.AddRange(QuerableData.Where(p => p.ParentId == CompanyId).Select(p => new mdlCommonReturnuintWithParentID { ParentId = p.ParentId, Id = p.Id, Code = p.Code, Name = p.Name, IsActive = p.IsActive }));
+            }
+            else if (OrgId > 0)
+            {
+                returnData.AddRange(QuerableData.Where(p => p.OrgId == OrgId).Select(p => new mdlCommonReturnuintWithParentID { ParentId = p.ParentId, Id = p.Id, Code = p.Code, Name = p.Name, IsActive = p.IsActive }));
+            }
+            else if ((CompanyIds?.Count ?? 0) > 0)
+            {
+                returnData.AddRange(QuerableData.Where(p => CompanyIds.Contains(p.ParentId)).Select(p => new mdlCommonReturnuintWithParentID { ParentId = p.ParentId, Id = p.Id, Code = p.Code, Name = p.Name, IsActive = p.IsActive }));
+            }
+            else
+            {
+                returnData.AddRange(QuerableData.Select(p => new mdlCommonReturnuintWithParentID { ParentId = p.ParentId, Id = p.Id, Code = p.Code, Name = p.Name, IsActive = p.IsActive }));
+            }
+
+            return returnData;
+        }
+
+
+        public List<mdlCommonReturnuintWithParentID> GetUserLocation(bool ClearCache, ulong UserId, uint? OrgId, uint? CompanyId, uint? ZoneId)
+        {
+            List<mdlCommonReturnuintWithParentID> returnData = new List<mdlCommonReturnuintWithParentID>();
+            if (ClearCache)
+            {
+                SetTempOrganisation(UserId);
+            }
+            if (ZoneId != null)
+            {
+                returnData.AddRange(
+                _masterContext.tblUserAllLocationPermission.Where(p => p.UserId == UserId && p.tblLocationMaster.ZoneId == ZoneId).
+                    Select(p => new mdlCommonReturnuintWithParentID { Name = p.tblLocationMaster.Name, Code = string.Empty, Id = p.LocationId ?? 0, IsActive = p.tblLocationMaster.IsActive, ParentId = p.tblLocationMaster.ZoneId ?? 0 }));
+            }
+            else if (CompanyId != null)
+            {
+                returnData.AddRange(
+                from t1 in _masterContext.tblUserAllLocationPermission
+                join t2 in _masterContext.tblLocationMaster on t1.LocationId equals t2.LocationId
+                join t3 in _masterContext.tblZoneMaster on t2.ZoneId equals t3.ZoneId
+                where t3.CompanyId == CompanyId && t1.UserId == UserId
+                select new mdlCommonReturnuintWithParentID { Name = t2.Name, Code = string.Empty, Id = t2.LocationId, IsActive = t2.IsActive, ParentId = t3.ZoneId });
+            }
+            else if (OrgId != null)
+            {
+                returnData.AddRange(
+                from t1 in _masterContext.tblUserAllLocationPermission
+                join t2 in _masterContext.tblLocationMaster on t1.LocationId equals t2.LocationId
+                where t2.OrgId == OrgId && t1.UserId == UserId
+                select new mdlCommonReturnuintWithParentID { Name = t2.Name, Code = string.Empty, Id = t2.LocationId, IsActive = t2.IsActive, ParentId = t2.ZoneId ?? 0 });
+            }
+            else
+            {
+                returnData.AddRange(
+                from t1 in _masterContext.tblUserAllLocationPermission
+                join t2 in _masterContext.tblLocationMaster on t1.LocationId equals t2.LocationId
+                where t1.UserId == UserId
+                select new mdlCommonReturnuintWithParentID { Name = t2.Name, Code = string.Empty, Id = t2.LocationId, IsActive = t2.IsActive, ParentId = t2.ZoneId ?? 0 });
+            }
+            return returnData;
+        }
+
+    
+
+
 
     }
 }

@@ -73,7 +73,8 @@ namespace projMasters.Models
     public class mdlRoleDocument
     {
         public enmDocumentMaster documentId { get; set; }
-        public enmDocumentType PermissionType { get; set; }
+        public enmDocumentType permissionType { get; set; }
+        public enmAdditionalClaim additionalClaim { get; set; }
     }
 
     #endregion

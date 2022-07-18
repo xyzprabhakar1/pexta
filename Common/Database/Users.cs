@@ -52,7 +52,7 @@ namespace Common.Database
 
     
 
-    public class tblRoleClaim : d_Modified
+    public class tblRoleClaim : d_CreatedModified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -93,7 +93,7 @@ namespace Common.Database
         public bool IsDeleted { get; set; }
     }
 
-    public class tblUserAllClaim
+    public class tblUserAllClaim 
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
