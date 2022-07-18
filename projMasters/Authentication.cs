@@ -12,22 +12,43 @@ using Common.CustomModels;
 
 namespace projMasters
 {
-    public class Auth
+    public interface IAuth
+    {
+        void BlockUnblockUser(ulong UserId, byte is_logged_blocked);
+        string GenerateJSONWebToken(string JWTKey, string JWTIssuer, ulong UserId, int CustomerId, int EmployeeId, int VendorId, ulong DistributorId, enmUserType userType, int OrgId);
+        List<enmAdditionalClaim> GetUserAdditionClaim(ulong UserId);
+        List<mdlCommonReturnuintWithParentID> GetUserCompany(ulong UserId, uint? OrgId, List<uint> OrgIds);
+        List<Document> GetUserDocuments(ulong UserId, bool OnlyDisplayMenu);
+        List<mdlCommonReturnuintWithParentID> GetUserLocation(bool ClearCache, ulong UserId, uint? OrgId, uint? CompanyId, uint? ZoneId);
+        List<mdlCommonReturnuintWithParentID> GetUserOrganisation(ulong UserId);
+        List<uint> GetUserRole(ulong UserId);
+        List<mdlCommonReturnuintWithParentID> GetUserZone(ulong UserId, uint? OrgId, uint? CompanyId, List<uint> CompanyIds);
+        mdlLoginResponse Login(mdlLoginRequest req);
+        void SaveLoginLog(ulong UserId, string IPAddress, string DeviceDetails, bool LoginStatus, string FromLocation, string Longitude, string Latitude);
+        bool SetRoleDocument(mdlRoleMaster roleDocument, uint CreatedBy);
+        void SetTempOrganisation(ulong UserId);
+        void SetTempRoleClaim(ulong UserId);
+        bool SetUserDocument(ulong UserId, List<mdlRoleDocument> usrClaim, ulong CreatedBy);
+        mdlReturnData SetUserMaster(ulong UserId, string NormalizedName, string UserName, string Email, string PhoneNumber, string Password, enmUserType UserType, int OrgId);
+        bool SetUserRole(mdlUserRolesWraper userRoles, ulong CreatedBy);
+    }
+
+    public class Auth : IAuth
     {
         private readonly MasterContext _masterContext;
         private readonly ISettings _setting;
-        public Auth(MasterContext masterContext,ISettings setting)
+        public Auth(MasterContext masterContext, ISettings setting)
         {
             _masterContext = masterContext;
             _setting = setting;
         }
         public mdlLoginResponse Login(mdlLoginRequest req)
         {
-            mdlLoginResponse res = new mdlLoginResponse() { messageType=enmMessageType.Error,normalizedName = String.Empty, error = new Common.CustomModels.Error() };
-            var tempData=_masterContext.tblUsersMaster.Where(p => p.UserName == req.userName && p.OrgId== req.orgId ).FirstOrDefault();
-            if (tempData==null)
+            mdlLoginResponse res = new mdlLoginResponse() { messageType = enmMessageType.Error, normalizedName = String.Empty, error = new Common.CustomModels.Error() };
+            var tempData = _masterContext.tblUsersMaster.Where(p => p.UserName == req.userName && p.OrgId == req.orgId).FirstOrDefault();
+            if (tempData == null)
             {
-                res.error.ErrorId = Common.Enums.enmError.InvalidUserorPassword;                
+                res.error.ErrorId = Common.Enums.enmError.InvalidUserorPassword;
                 return res;
             }
             if (!tempData.IsActive)
@@ -108,7 +129,7 @@ namespace projMasters
         }
 
         public void SaveLoginLog(ulong UserId, string IPAddress, string DeviceDetails, bool LoginStatus, string FromLocation, string Longitude, string Latitude)
-        {   
+        {
             _masterContext.tblUserLoginLog.Add(new Common.Database.tblUserLoginLog()
             {
                 UserId = UserId,
@@ -124,7 +145,7 @@ namespace projMasters
         }
 
         public string GenerateJSONWebToken(string JWTKey, string JWTIssuer,
-           ulong UserId, int CustomerId,int EmployeeId, int VendorId, ulong DistributorId
+           ulong UserId, int CustomerId, int EmployeeId, int VendorId, ulong DistributorId
            , enmUserType userType, int OrgId
            )
         {
@@ -175,13 +196,13 @@ namespace projMasters
              inner join tblUserCompanyPermission t4 on t4.CompanyId=t2.CompanyId and t4.UserId={UserId} and t4.IsDeleted=0  and t4.HaveAllZoneAccess=0
              inner join tblUserZonePermission t5 on t5.ZoneId=t2.ZoneId and t5.UserId={UserId} and t5.IsDeleted=0  and t5.HaveAllLocationAccess=1
              union
-             select LocationId from tblUserLocationPermission Where UserId={UserId} and IsDeleted=0 )t;" );
+             select LocationId from tblUserLocationPermission Where UserId={UserId} and IsDeleted=0 )t;");
 
         }
 
         public List<Document> GetUserDocuments(ulong UserId, bool OnlyDisplayMenu)
         {
-            IEnumerable<tblUserAllClaim> alluserClaims = _masterContext.tblUserAllClaim.Where(p => p.UserId == UserId && p.AdditionalClaim == enmAdditionalClaim.None);            
+            IEnumerable<tblUserAllClaim> alluserClaims = _masterContext.tblUserAllClaim.Where(p => p.UserId == UserId && p.AdditionalClaim == enmAdditionalClaim.None);
             var tempData = alluserClaims.Select(p => p.DocumentMaster).Distinct();
             List<Document> documents = new List<Document>();
             foreach (var d in tempData)
@@ -212,7 +233,7 @@ namespace projMasters
                 {
                     permissionType = permissionType | enmDocumentType.DisplayMenu;
                 }
-                if (doc.HavePendingReport  && alluserClaims.Any(p => p.DocumentType == enmDocumentType.PendingReport))
+                if (doc.HavePendingReport && alluserClaims.Any(p => p.DocumentType == enmDocumentType.PendingReport))
                 {
                     permissionType = permissionType | enmDocumentType.PendingReport;
                 }
@@ -232,7 +253,7 @@ namespace projMasters
 
         public List<enmAdditionalClaim> GetUserAdditionClaim(ulong UserId)
         {
-            return _masterContext.tblUserAllClaim.Where(p => p.UserId == UserId && p.AdditionalClaim != enmAdditionalClaim.None).Select(q=>q.AdditionalClaim).ToList();
+            return _masterContext.tblUserAllClaim.Where(p => p.UserId == UserId && p.AdditionalClaim != enmAdditionalClaim.None).Select(q => q.AdditionalClaim).ToList();
         }
 
         public bool SetRoleDocument(mdlRoleMaster roleDocument, uint CreatedBy)
@@ -242,16 +263,16 @@ namespace projMasters
 
             StringBuilder sb = new StringBuilder("");
             sb.Append("insert into tblRoleClaim(RoleId,DocumentMaster,DocumentType,AdditionalClaim,IsDeleted,ModifiedDt,ModifiedBy,ModifiedRemarks,CreatedDt,CreatedBy) values ");
-            var tempdata = roleDocument?.roleDocument?.Where(q => q.documentId > 0 || q.additionalClaim>0).
-                Select(p => new { data = "("+ "'" + roleDocument.roleId + "',"+ p.documentId+","+p.permissionType+","+p.additionalClaim+",0,'" + dateTime.ToString("yyyy-MM-dd") + "'," + CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','" + CreatedBy + "'"+ ")" });
+            var tempdata = roleDocument?.roleDocument?.Where(q => q.documentId > 0 || q.additionalClaim > 0).
+                Select(p => new { data = "(" + "'" + roleDocument.roleId + "'," + p.documentId + "," + p.permissionType + "," + p.additionalClaim + ",0,'" + dateTime.ToString("yyyy-MM-dd") + "'," + CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','" + CreatedBy + "'" + ")" });
             sb.AppendFormat(string.Join(",", tempdata) + ";");
             _masterContext.Database.ExecuteSqlRaw(sb.ToString());
             _masterContext.SaveChanges();
             return true;
         }
-        
+
         public mdlReturnData SetUserMaster(ulong UserId, string NormalizedName, string UserName, string Email, string PhoneNumber, string Password, enmUserType UserType,
-            int OrgId 
+            int OrgId
             )
         {
             mdlReturnData returnData = new mdlReturnData();
@@ -313,7 +334,7 @@ namespace projMasters
         #region UserRole
         public List<uint> GetUserRole(ulong UserId)
         {
-            return _masterContext.tblUserRole.Where(p => p.UserId == UserId && !p.IsDeleted ).Select(p => p.RoleId??0 ).ToList();
+            return _masterContext.tblUserRole.Where(p => p.UserId == UserId && !p.IsDeleted).Select(p => p.RoleId ?? 0).ToList();
         }
 
         public bool SetUserRole(mdlUserRolesWraper userRoles, ulong CreatedBy)
@@ -322,9 +343,9 @@ namespace projMasters
             _masterContext.Database.ExecuteSqlInterpolated($@"update tblUserRole set isdeleted=1,ModifiedBy={CreatedBy},ModifiedDt={dateTime.ToString("yyyy-MM-dd")} Where  UserId={userRoles.userMaster.userId} and isdeleted=0;");
             StringBuilder sb = new StringBuilder("");
             sb.Append("insert into tblUserRole(UserId,RoleId,IsDeleted,ModifiedDt,ModifiedBy,ModifiedRemarks,CreatedDt,CreatedBy) values ");
-            var tempdata = userRoles?.userRoles?.Select(p => p.roleMaster?.roleId??0).Where(q=>q>0).
-                Select(p=>new {data=string.Concat("(","'"+ userRoles.userMaster.userId + "',",p,",0,'"+ dateTime.ToString("yyyy-MM-dd") + "',"+ CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','"+ CreatedBy + "'", ")")});
-            sb.AppendFormat(string.Join(",", tempdata)+";");
+            var tempdata = userRoles?.userRoles?.Select(p => p.roleMaster?.roleId ?? 0).Where(q => q > 0).
+                Select(p => new { data = string.Concat("(", "'" + userRoles.userMaster.userId + "',", p, ",0,'" + dateTime.ToString("yyyy-MM-dd") + "'," + CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','" + CreatedBy + "'", ")") });
+            sb.AppendFormat(string.Join(",", tempdata) + ";");
             _masterContext.Database.ExecuteSqlRaw(sb.ToString());
             _masterContext.SaveChanges();
             return true;
@@ -336,8 +357,8 @@ namespace projMasters
             _masterContext.Database.ExecuteSqlInterpolated($@"update tblUserClaim set isdeleted=1,ModifiedBy={CreatedBy},ModifiedDt={dateTime.ToString("yyyy-MM-dd")} Where  UserId={UserId} and isdeleted=0;");
             StringBuilder sb = new StringBuilder("");
             sb.Append("insert into tblUserClaim(UserId,DocumentMaster,DocumentType,IsDeleted,ModifiedDt,ModifiedBy,ModifiedRemarks,CreatedDt,CreatedBy) values ");
-            var tempdata = usrClaim.Where(q => q.additionalClaim > 0 || q.documentId>0).
-                Select(p => new { data = "("+UserId+ "," + p.documentId+ ","+ p.permissionType+ ",0,'" + dateTime.ToString("yyyy-MM-dd") + "'," + CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','" + CreatedBy + "'"+ ")" });
+            var tempdata = usrClaim.Where(q => q.additionalClaim > 0 || q.documentId > 0).
+                Select(p => new { data = "(" + UserId + "," + p.documentId + "," + p.permissionType + ",0,'" + dateTime.ToString("yyyy-MM-dd") + "'," + CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','" + CreatedBy + "'" + ")" });
             sb.AppendFormat(string.Join(",", tempdata) + ";");
             _masterContext.Database.ExecuteSqlRaw(sb.ToString());
             _masterContext.SaveChanges();
@@ -483,6 +504,6 @@ namespace projMasters
             }
             return returnData;
         }
-    
+
     }
 }

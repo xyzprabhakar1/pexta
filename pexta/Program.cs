@@ -1,4 +1,8 @@
+
 var builder = WebApplication.CreateBuilder(args);
+
+//Add All Db Context
+//builder.Services.AddDbContext<projMasters.Database.>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("PextaHrmsMsSql")));
 
 // Add services to the container.
 

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace projMasters.Database
 {
+    //add-migration -s pextaApi Authentication -Context projMasters.Database.MasterContext -project projMasters
+    //update-database -s pextaApi -Context projMasters.Database.MasterContext -project projMasters
     public class MasterContext : CommonContext
     {
         public MasterContext(DbContextOptions<MasterContext> options) :base(options)

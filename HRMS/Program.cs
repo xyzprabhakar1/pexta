@@ -1,7 +1,6 @@
 using HRMS.classes.repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

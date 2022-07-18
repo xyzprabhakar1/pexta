@@ -11,7 +11,21 @@ using System.Threading.Tasks;
 
 namespace projMasters
 {
-    public  class Masters
+    public interface IMasters
+    {
+        string GenrateCode(enmCodeGenrationType genrationType, string Prefix = "", string CountryCode = "", string StateCode = "", string CompanyCode = "", string ZoneCode = "", string LocationCode = "", uint MonthYear = 0, uint Year = 0, uint YearWeek = 0, bool IncludeCountryCode = false, bool IncludeStateCode = false, bool IncludeCompanyCode = false, bool IncludeZoneCode = false, bool IncludeLocationCode = false, bool IncludeYear = false, bool IncludeMonthYear = false, bool IncludeYearWeek = false, byte DigitFormate = 5, uint OrgId = 1, uint UserId = 0);
+        mdlCommonReturn GetCountry(uint CountryId);
+        List<mdlCommonReturn> GetCountry(uint[] CountryIds);
+        tblFileMaster GetImage(string FileId);
+        List<tblFileMaster> GetImages(string[] FileIds);
+        mdlCommonReturn GetOrganisation(string OrgCode);
+        mdlCommonReturn GetState(int StateId);
+        List<mdlCommonReturn> GetStates(int CountryId);
+        List<mdlCommonReturn> GetStates(uint[] StateId);
+        string SetImage(IFormFile fromFile, enmFileType mimeType, uint userId);
+    }
+
+    public class Masters : IMasters
     {
         private readonly MasterContext _masterContext;
         public Masters(MasterContext masterContext)
@@ -193,7 +207,7 @@ namespace projMasters
                     YearWeek = YearWeek,
                     Counter = 1,
                     ModifiedDt = DateTime.Now,
-                    ModifiedBy=UserId
+                    ModifiedBy = UserId
                 };
                 _masterContext.tblCodeGenrationDetails.Add(details);
                 _masterContext.SaveChanges();
