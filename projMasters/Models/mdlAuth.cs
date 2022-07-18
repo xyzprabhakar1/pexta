@@ -10,23 +10,29 @@ using System.Threading.Tasks;
 namespace projMasters.Models
 {
     public class mdlLoginRequest
-    {   
+    {
+        public uint userId { get; set; }
+        [Required]
         public string userName { get; set; }
+        [Required]
         public string password { get; set; }
         public string orgCode { get; set; }
         public uint orgId { get; set; }
-        public string securityStamp { get; set; }
-        public string otp{ get; set; }
         [Required]
         public string captchaId { get; set; }
         public string captchaValue { get; set; }
+        public int height{ get; set; }
+        public int width { get; set; }
+        public string longitude { get; set; }
+        public string latitude { get; set; }
     }
     public class mdlLoginResponse
     {
-        private ulong _userId;
+        private uint _userId;
         private string _userIdHex;
-        public string userIdHex { get { return _userIdHex; } set { _userIdHex = value; _userId = ulong.Parse(_userIdHex, System.Globalization.NumberStyles.HexNumber); } }
-        public ulong userId { get { return _userId; } set { _userId = value; _userIdHex= string.Format("{0:X4}", _userId);  } }
+        public string userIdHex { get { return _userIdHex; } set { _userIdHex = value; _userId = uint.Parse(_userIdHex, System.Globalization.NumberStyles.HexNumber); } }
+        public uint userId { get { return _userId; } set { _userId = value; _userIdHex= string.Format("{0:X4}", _userId);  } }
+        public uint orgId { get; set; }
         public enmMessageType messageType { get; set; }
         public string token { get; set; }
         public string normalizedName { get; set; }
@@ -36,8 +42,9 @@ namespace projMasters.Models
         public int?[] company_list { get; set; }        
         public string company_name { get; set; }
         public string company_logo { get; set; }
-        public string captchaId { get; set; }
-        public string captchaValue { get; set; }
+        public string captchaId { get; set; } = "";        
+        public byte [] captchaImages { get; set; }
+        public enmUserType userType { get; set; }
     }
 
 
@@ -63,7 +70,7 @@ namespace projMasters.Models
     }
     public class mdlUserMaster
     {
-        public ulong userId { get; set; }
+        public uint userId { get; set; }
         public string userName { get; set; }
         public string email { get; set; }
         public string phoneNumber { get; set; }

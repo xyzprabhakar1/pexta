@@ -24,4 +24,8 @@
     <ProjectReference Include="..\projMasters\projMasters.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

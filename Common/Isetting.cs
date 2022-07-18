@@ -9,10 +9,13 @@ namespace Common
 {
     public interface ISettings
     {
+        string GetClientIPAddress();
+        string GetBrowserDetail();
+        string GetDeviceDetail();
         byte[] GenerateImage(int width, int height, string captchaCode);
         string GenrateCharcter(bool IsAlphanumeric, int NumberOfCharcter);
-        OTP GenrateOTP(ulong UserId, string LoginCaptchaExpiryTime, string description);
+        OTP GenrateOTP(uint UserId, string LoginCaptchaExpiryTime, string description);
         string GetSettings(string SettingGroup, string SettingName);
-        mdlReturnData ValidateCaptcha(ulong userId, string Otp, string SecurityStamp);
+        mdlReturnData ValidateCaptcha(uint userId, string Otp, string SecurityStamp);
     }
 }

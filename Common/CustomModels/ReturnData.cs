@@ -10,7 +10,8 @@ namespace Common.CustomModels
 {
     public class mdlReturnData
     {
-        public enmMessageType messageType { get; set; }
+        public enmMessageType messageType { get; set; }  
+        public Error error { get; set; }
         public string message { get; set; }
         public dynamic ReturnId { get; set; }
     }

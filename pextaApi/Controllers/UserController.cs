@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Common.CustomModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using pextaApi.Models;
+using Common.Enums;
+using projMasters.Models;
 
 namespace pextaApi.Controllers
 {
@@ -8,26 +10,76 @@ namespace pextaApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpPost]
-        [Route("login")]        
-        public mdlLoginResponse login(mdlLoginRequest mdl)
+        private readonly ILogger<UserController> _logger;
+        private readonly projMasters.IAuth _auth;
+        private readonly projMasters.IMasters _master;
+        private readonly Common.ISettings _Settings;
+        private readonly IConfiguration _config;
+
+        public UserController(ILogger<UserController> logger, projMasters.IAuth auth, projMasters.IMasters master,
+            IConfiguration config)
         {
-            mdlLoginResponse res = new mdlLoginResponse()
+            _logger = logger;
+            _auth = auth;
+            _master = master;
+            _config = config;
+        }
+
+        private mdlReturnData GenrateCaptcha(uint UserId, int Width, int Height)
+        {
+            mdlReturnData mdl = new mdlReturnData() { messageType = enmMessageType.None };
+            var tempData = _Settings.GenrateOTP(UserId, "LoginCaptchaExpiryTime", "Login");
+            mdl.message = tempData.securityStamp;
+            if (tempData.messageType != enmMessageType.Success)
             {
-                error = new Common.CustomModels.Error(),
-                IsSuccess = false,
-                token = String.Empty
-            };
-            if (mdl.userName == "prabhakar" && mdl.password == "123456")
-            {
-                res.IsSuccess = true;
+                mdl.ReturnId = _Settings.GenerateImage(Width, Height, tempData.otp);
+                mdl.messageType = enmMessageType.Success;
             }
             else
             {
-                res.error.Message = "Invalid Username or password";
+                mdl.messageType = enmMessageType.Error;
+                mdl.error = new Error() { ErrorId = enmError.UndefinedException };
             }
+            return mdl;
+        }
 
-            return res;
+        [HttpGet]
+        public IActionResult GetCaptcha(uint UserId,int Width,int Height)
+        {
+            return Ok( GenrateCaptcha(UserId, Width, Height));
+        }
+
+
+        [HttpPost]
+        [Route("login")]        
+        public IActionResult login(mdlLoginRequest mdl)
+        {
+            mdlLoginResponse res = new mdlLoginResponse();
+            if (ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var IsValid=_Settings.ValidateCaptcha(mdl.userId, mdl.captchaValue, mdl.captchaId);
+            if (IsValid.messageType!=enmMessageType.Success)
+            {
+                res.messageType = enmMessageType.Error;
+                res.error = new Error() { ErrorId=enmError.InvalidCaptcha };
+                return Ok(res);
+            }
+            res = _auth.Login(mdl);
+            _auth.SaveLoginLog(mdl.userId,_Settings.GetClientIPAddress(),string.Concat(_Settings.GetDeviceDetail(), " - ", _Settings.GetBrowserDetail()), res.messageType==enmMessageType.Success,"",mdl.longitude,mdl.latitude);
+            if (res.messageType == enmMessageType.Error)
+            {
+                //Regenrate the captha
+                var tempcaptcha=GenrateCaptcha(mdl.userId,mdl.width,mdl.height);
+                res.captchaId = tempcaptcha.message;
+                res.captchaImages = tempcaptcha.ReturnId;
+                return Ok(res);
+            }
+            //Genrate captcha
+            var token=_auth.GenerateJSONWebToken(_config["Jwt:Key"], _config["Jwt:Issuer"], res.userId, 0, 0, 0, 0, res.userType, Convert.ToInt32(res.orgId));
+            res.token= token;
+            return Ok( res);
         }
     }
 }

@@ -29,6 +29,8 @@ namespace Common.Enums
         RequiredField,
         [Description("Invalid Id !!!")]
         InvalidID,
+        [Description("Invalid Captcha !!!")]
+        InvalidCaptcha,
         [Description("Invalid Organization !!!")]
         InvalidOrganization,
         [Description("Invalid User !!!")]

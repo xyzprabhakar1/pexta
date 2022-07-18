@@ -12,6 +12,8 @@ using Common.Database;
 using Common.Enums;
 using Common;
 using Common.CustomModels;
+using Microsoft.AspNetCore.Http;
+using UAParser;
 
 namespace projMasters
 {
@@ -21,13 +23,51 @@ namespace projMasters
     {
         private readonly MasterContext _mastercontext;
         private readonly IConfiguration _config;
-        public Settings(MasterContext context, IConfiguration config)
+        private readonly IHttpContextAccessor _accessor;
+        public Settings(MasterContext context, IConfiguration config, IHttpContextAccessor accessor)
         {
             _mastercontext = context;
             _config = config;
+            _accessor = accessor;
         }
 
+        public string GetClientIPAddress()
+        {
+            return Convert.ToString(_accessor.HttpContext?.Connection?.RemoteIpAddress) ;
+        }
 
+        private ClientInfo GetUserAgent()
+        {
+            
+            var userAgent = _accessor.HttpContext?.Request?.Headers?["User-Agent"];
+            if (string.IsNullOrEmpty(userAgent))
+            {
+                return null;
+
+            }
+            var uaParser = Parser.GetDefault();
+            ClientInfo c = uaParser.Parse(userAgent);
+            return c;
+        }
+
+        public string GetBrowserDetail()
+        {
+            var ua = GetUserAgent();
+            if (ua == null)
+            {
+                return "";
+            }
+            return ua.UA.Family;
+        }
+        public string GetDeviceDetail()
+        {
+            var ua = GetUserAgent();
+            if (ua == null)
+            {
+                return "";
+            }
+            return String.Concat( ua.Device.Family," - "+ (ua.OS?.Family??""));
+        }
 
         public string GetSettings(string SettingGroup, string SettingName)
         {
@@ -88,7 +128,7 @@ namespace projMasters
         }
 
 
-        public OTP GenrateOTP(ulong UserId, string LoginCaptchaExpiryTime, string description)
+        public OTP GenrateOTP(uint UserId, string LoginCaptchaExpiryTime, string description)
         {
             OTP ReturnData = new OTP() { messageType = enmMessageType.None };
             int LoginCaptchaExpiry = 30;
@@ -111,7 +151,7 @@ namespace projMasters
             return ReturnData;
         }
 
-        public mdlReturnData ValidateCaptcha(ulong userId, string Otp, string SecurityStamp)
+        public mdlReturnData ValidateCaptcha(uint userId, string Otp, string SecurityStamp)
         {
             mdlReturnData ReturnData = new mdlReturnData() { messageType = enmMessageType.None };
             var tempResult = _mastercontext.tblUserOTP.Where(p => p.UserId == userId && p.SecurityStamp == SecurityStamp && p.OTP == Otp && p.EffectiveToDt > DateTime.Now).FirstOrDefault();

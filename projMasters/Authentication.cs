@@ -14,23 +14,23 @@ namespace projMasters
 {
     public interface IAuth
     {
-        void BlockUnblockUser(ulong UserId, byte is_logged_blocked);
-        string GenerateJSONWebToken(string JWTKey, string JWTIssuer, ulong UserId, int CustomerId, int EmployeeId, int VendorId, ulong DistributorId, enmUserType userType, int OrgId);
-        List<enmAdditionalClaim> GetUserAdditionClaim(ulong UserId);
-        List<mdlCommonReturnuintWithParentID> GetUserCompany(ulong UserId, uint? OrgId, List<uint> OrgIds);
-        List<Document> GetUserDocuments(ulong UserId, bool OnlyDisplayMenu);
-        List<mdlCommonReturnuintWithParentID> GetUserLocation(bool ClearCache, ulong UserId, uint? OrgId, uint? CompanyId, uint? ZoneId);
-        List<mdlCommonReturnuintWithParentID> GetUserOrganisation(ulong UserId);
-        List<uint> GetUserRole(ulong UserId);
-        List<mdlCommonReturnuintWithParentID> GetUserZone(ulong UserId, uint? OrgId, uint? CompanyId, List<uint> CompanyIds);
+        void BlockUnblockUser(uint UserId, byte is_logged_blocked, out int failCount);
+        string GenerateJSONWebToken(string JWTKey, string JWTIssuer, uint UserId, int CustomerId, int EmployeeId, int VendorId, uint DistributorId, enmUserType userType, int OrgId);
+        List<enmAdditionalClaim> GetUserAdditionClaim(uint UserId);
+        List<mdlCommonReturnuintWithParentID> GetUserCompany(uint UserId, uint? OrgId, List<uint> OrgIds);
+        List<Document> GetUserDocuments(uint UserId, bool OnlyDisplayMenu);
+        List<mdlCommonReturnuintWithParentID> GetUserLocation(bool ClearCache, uint UserId, uint? OrgId, uint? CompanyId, uint? ZoneId);
+        List<mdlCommonReturnuintWithParentID> GetUserOrganisation(uint UserId);
+        List<uint> GetUserRole(uint UserId);
+        List<mdlCommonReturnuintWithParentID> GetUserZone(uint UserId, uint? OrgId, uint? CompanyId, List<uint> CompanyIds);
         mdlLoginResponse Login(mdlLoginRequest req);
-        void SaveLoginLog(ulong UserId, string IPAddress, string DeviceDetails, bool LoginStatus, string FromLocation, string Longitude, string Latitude);
+        void SaveLoginLog(uint UserId, string IPAddress, string DeviceDetails, bool LoginStatus, string FromLocation, string Longitude, string Latitude);
         bool SetRoleDocument(mdlRoleMaster roleDocument, uint CreatedBy);
-        void SetTempOrganisation(ulong UserId);
-        void SetTempRoleClaim(ulong UserId);
-        bool SetUserDocument(ulong UserId, List<mdlRoleDocument> usrClaim, ulong CreatedBy);
-        mdlReturnData SetUserMaster(ulong UserId, string NormalizedName, string UserName, string Email, string PhoneNumber, string Password, enmUserType UserType, int OrgId);
-        bool SetUserRole(mdlUserRolesWraper userRoles, ulong CreatedBy);
+        void SetTempOrganisation(uint UserId);
+        void SetTempRoleClaim(uint UserId);
+        bool SetUserDocument(uint UserId, List<mdlRoleDocument> usrClaim, uint CreatedBy);
+        mdlReturnData SetUserMaster(uint UserId, string NormalizedName, string UserName, string Email, string PhoneNumber, string Password, enmUserType UserType, int OrgId);
+        bool SetUserRole(mdlUserRolesWraper userRoles, uint CreatedBy);
     }
 
     public class Auth : IAuth
@@ -42,10 +42,13 @@ namespace projMasters
             _masterContext = masterContext;
             _setting = setting;
         }
+        
+
         public mdlLoginResponse Login(mdlLoginRequest req)
         {
             mdlLoginResponse res = new mdlLoginResponse() { messageType = enmMessageType.Error, normalizedName = String.Empty, error = new Common.CustomModels.Error() };
             var tempData = _masterContext.tblUsersMaster.Where(p => p.UserName == req.userName && p.OrgId == req.orgId).FirstOrDefault();
+            int failCount = 0;
             if (tempData == null)
             {
                 res.error.ErrorId = Common.Enums.enmError.InvalidUserorPassword;
@@ -60,7 +63,7 @@ namespace projMasters
             {
                 if (tempData.logged_blocked_Enddt < DateTime.Now)
                 {
-                    BlockUnblockUser(tempData.UserId, 0);
+                    BlockUnblockUser(tempData.UserId, 0, out failCount);
                 }
                 else
                 {
@@ -70,8 +73,9 @@ namespace projMasters
             }
             if (tempData.Password != req.password)
             {
-                BlockUnblockUser(tempData.UserId, 1);
+                BlockUnblockUser(tempData.UserId, 1,out  failCount);
                 res.error.ErrorId = Common.Enums.enmError.InvalidUserorPassword;
+                res.failCount = failCount;
                 return res;
             }
             res.messageType = enmMessageType.Success;
@@ -81,15 +85,16 @@ namespace projMasters
         }
 
 
-        public void BlockUnblockUser(ulong UserId, byte is_logged_blocked)
+        public void BlockUnblockUser(uint UserId, byte is_logged_blocked,out int failCount)
         {
             bool AllowBlockonFail = false;
+            failCount = 1;
             DateTime CurrentDate = Convert.ToDateTime(DateTime.Now.ToString("dd-MMM-yyyy"));
             int BlockUserAfterLoginFailAttempets = 10, BlockUserAfterLoginFailAttempetsForTime = 30;
             var tempData = _masterContext.tblUsersMaster.Where(p => p.UserId == UserId).FirstOrDefault();
             if (tempData == null)
             {
-                return;
+                return ;
             }
             if (is_logged_blocked == 1)
             {
@@ -115,6 +120,7 @@ namespace projMasters
                         else
                         {
                             tempData.LoginFailCount = ++tempData.LoginFailCount;
+                            failCount = tempData.LoginFailCount;
                         }
                     }
                 }
@@ -128,7 +134,7 @@ namespace projMasters
 
         }
 
-        public void SaveLoginLog(ulong UserId, string IPAddress, string DeviceDetails, bool LoginStatus, string FromLocation, string Longitude, string Latitude)
+        public void SaveLoginLog(uint UserId, string IPAddress, string DeviceDetails, bool LoginStatus, string FromLocation, string Longitude, string Latitude)
         {
             _masterContext.tblUserLoginLog.Add(new Common.Database.tblUserLoginLog()
             {
@@ -145,7 +151,7 @@ namespace projMasters
         }
 
         public string GenerateJSONWebToken(string JWTKey, string JWTIssuer,
-           ulong UserId, int CustomerId, int EmployeeId, int VendorId, ulong DistributorId
+           uint UserId, int CustomerId, int EmployeeId, int VendorId, uint DistributorId
            , enmUserType userType, int OrgId
            )
         {
@@ -167,7 +173,7 @@ namespace projMasters
             return Token;
         }
 
-        public void SetTempRoleClaim(ulong UserId)
+        public void SetTempRoleClaim(uint UserId)
         {
             FormattableString formattableString = $@"delete from tblUserAllClaim Where UserId={UserId};
                 insert into tblUserAllClaim(UserId,DocumentMaster,DocumentType)
@@ -178,7 +184,7 @@ namespace projMasters
             _masterContext.Database.ExecuteSqlInterpolated(formattableString);
         }
 
-        public void SetTempOrganisation(ulong UserId)
+        public void SetTempOrganisation(uint UserId)
         {
 
             _masterContext.Database.ExecuteSqlInterpolated($@"delete from tblUserAllLocationPermission  Where UserId={UserId};
@@ -200,7 +206,7 @@ namespace projMasters
 
         }
 
-        public List<Document> GetUserDocuments(ulong UserId, bool OnlyDisplayMenu)
+        public List<Document> GetUserDocuments(uint UserId, bool OnlyDisplayMenu)
         {
             IEnumerable<tblUserAllClaim> alluserClaims = _masterContext.tblUserAllClaim.Where(p => p.UserId == UserId && p.AdditionalClaim == enmAdditionalClaim.None);
             var tempData = alluserClaims.Select(p => p.DocumentMaster).Distinct();
@@ -251,7 +257,7 @@ namespace projMasters
             return documents;
         }
 
-        public List<enmAdditionalClaim> GetUserAdditionClaim(ulong UserId)
+        public List<enmAdditionalClaim> GetUserAdditionClaim(uint UserId)
         {
             return _masterContext.tblUserAllClaim.Where(p => p.UserId == UserId && p.AdditionalClaim != enmAdditionalClaim.None).Select(q => q.AdditionalClaim).ToList();
         }
@@ -271,7 +277,7 @@ namespace projMasters
             return true;
         }
 
-        public mdlReturnData SetUserMaster(ulong UserId, string NormalizedName, string UserName, string Email, string PhoneNumber, string Password, enmUserType UserType,
+        public mdlReturnData SetUserMaster(uint UserId, string NormalizedName, string UserName, string Email, string PhoneNumber, string Password, enmUserType UserType,
             int OrgId
             )
         {
@@ -332,12 +338,12 @@ namespace projMasters
 
 
         #region UserRole
-        public List<uint> GetUserRole(ulong UserId)
+        public List<uint> GetUserRole(uint UserId)
         {
             return _masterContext.tblUserRole.Where(p => p.UserId == UserId && !p.IsDeleted).Select(p => p.RoleId ?? 0).ToList();
         }
 
-        public bool SetUserRole(mdlUserRolesWraper userRoles, ulong CreatedBy)
+        public bool SetUserRole(mdlUserRolesWraper userRoles, uint CreatedBy)
         {
             DateTime dateTime = DateTime.Now;
             _masterContext.Database.ExecuteSqlInterpolated($@"update tblUserRole set isdeleted=1,ModifiedBy={CreatedBy},ModifiedDt={dateTime.ToString("yyyy-MM-dd")} Where  UserId={userRoles.userMaster.userId} and isdeleted=0;");
@@ -351,7 +357,7 @@ namespace projMasters
             return true;
         }
 
-        public bool SetUserDocument(ulong UserId, List<mdlRoleDocument> usrClaim, ulong CreatedBy)
+        public bool SetUserDocument(uint UserId, List<mdlRoleDocument> usrClaim, uint CreatedBy)
         {
             DateTime dateTime = DateTime.Now;
             _masterContext.Database.ExecuteSqlInterpolated($@"update tblUserClaim set isdeleted=1,ModifiedBy={CreatedBy},ModifiedDt={dateTime.ToString("yyyy-MM-dd")} Where  UserId={UserId} and isdeleted=0;");
@@ -367,7 +373,7 @@ namespace projMasters
         }
         #endregion
 
-        public List<mdlCommonReturnuintWithParentID> GetUserOrganisation(ulong UserId)
+        public List<mdlCommonReturnuintWithParentID> GetUserOrganisation(uint UserId)
         {
             List<mdlCommonReturnuintWithParentID> returnData = new List<mdlCommonReturnuintWithParentID>();
             returnData.AddRange(
@@ -377,7 +383,7 @@ namespace projMasters
             return returnData;
         }
 
-        public List<mdlCommonReturnuintWithParentID> GetUserCompany(ulong UserId, uint? OrgId, List<uint> OrgIds)
+        public List<mdlCommonReturnuintWithParentID> GetUserCompany(uint UserId, uint? OrgId, List<uint> OrgIds)
         {
             List<mdlCommonReturnuintWithParentID> returnData = new List<mdlCommonReturnuintWithParentID>();
             if (OrgId == 0)
@@ -412,7 +418,7 @@ namespace projMasters
             return returnData;
         }
 
-        public List<mdlCommonReturnuintWithParentID> GetUserZone(ulong UserId, uint? OrgId, uint? CompanyId, List<uint> CompanyIds)
+        public List<mdlCommonReturnuintWithParentID> GetUserZone(uint UserId, uint? OrgId, uint? CompanyId, List<uint> CompanyIds)
         {
             List<mdlCommonReturnuintWithParentID> returnData = new List<mdlCommonReturnuintWithParentID>();
             if (CompanyId == 0)
@@ -464,7 +470,7 @@ namespace projMasters
             return returnData;
         }
 
-        public List<mdlCommonReturnuintWithParentID> GetUserLocation(bool ClearCache, ulong UserId, uint? OrgId, uint? CompanyId, uint? ZoneId)
+        public List<mdlCommonReturnuintWithParentID> GetUserLocation(bool ClearCache, uint UserId, uint? OrgId, uint? CompanyId, uint? ZoneId)
         {
             List<mdlCommonReturnuintWithParentID> returnData = new List<mdlCommonReturnuintWithParentID>();
             if (ClearCache)

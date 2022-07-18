@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Add Db Context
 builder.Services.AddDbContext<projMasters.Database.MasterContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("PextaHrmsMsSql")));
 // Add services to the container.
-builder.Services.AddScoped<ISettings>(srv => new projMasters.Settings(srv.GetRequiredService<projMasters.Database.MasterContext>(), srv.GetRequiredService<IConfiguration>()));
+builder.Services.AddScoped<ISettings>(srv => new projMasters.Settings(srv.GetRequiredService<projMasters.Database.MasterContext>(), srv.GetRequiredService<IConfiguration>(),srv.GetRequiredService<IHttpContextAccessor>()));
 builder.Services.AddScoped<projMasters.IMasters>(srv => new projMasters.Masters(srv.GetRequiredService<projMasters.Database.MasterContext>()));
 builder.Services.AddScoped<projMasters.IAuth>(srv => new projMasters.Auth(srv.GetRequiredService<projMasters.Database.MasterContext>(),srv.GetRequiredService<ISettings>()));
 ////////////////
