@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -73,5 +74,13 @@ namespace Common.Database
         public string AppSettingValue { get; set; }
         public bool IsActive { get; set; }
         
+    }
+    public class tblFileMaster : d_CreatedModified
+    {
+        [Key]
+        [MaxLength(64)]
+        public string FileId { get; set; }
+        public byte[] File { get; set; }
+        public enmFileType FileType { get; set; }
     }
 }

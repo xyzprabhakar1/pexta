@@ -37,6 +37,8 @@ namespace Common.Database
         public DbSet<tblBankMaster> tblBankMaster { get; set; }
         public DbSet<tblCurrency> tblCurrency { get; set; }
         public DbSet<tbl_app_setting> tbl_app_setting { get; set; }
+        public DbSet<tblFileMaster> tblFileMaster { get; set; }
+        
         #endregion
 
 

@@ -66,7 +66,7 @@ namespace Common.Database
         public bool IsDeleted { get; set; }
     }
 
-    public class tblUserClaim : d_Modified
+    public class tblUserClaim : d_CreatedModified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

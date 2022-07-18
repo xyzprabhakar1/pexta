@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Common.Database
 {
-    public class tblCodeGenrationMaster : d_Modified
+    public class tblCodeGenrationMaster : d_CreatedModified
     {
         [Key()]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,10 +24,11 @@ namespace Common.Database
         public bool IncludeYear { get; set; }
         public bool IncludeMonthYear { get; set; }
         public bool IncludeYearWeek { get; set; }
-        public byte DigitFormate { get; set; }        
+        public byte DigitFormate { get; set; }      
+        public uint OrgId { get; set; }
 
     }
-    public class tblCodeGenrationDetails
+    public class tblCodeGenrationDetails :d_Modified
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

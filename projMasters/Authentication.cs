@@ -243,12 +243,72 @@ namespace projMasters
             StringBuilder sb = new StringBuilder("");
             sb.Append("insert into tblRoleClaim(RoleId,DocumentMaster,DocumentType,AdditionalClaim,IsDeleted,ModifiedDt,ModifiedBy,ModifiedRemarks,CreatedDt,CreatedBy) values ");
             var tempdata = roleDocument?.roleDocument?.Where(q => q.documentId > 0 || q.additionalClaim>0).
-                Select(p => new { data = string.Concat("(", "'" + roleDocument.roleId + "',", p.documentId, ","+p.permissionType+","+p.additionalClaim+",0,'" + dateTime.ToString("yyyy-MM-dd") + "'," + CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','" + CreatedBy + "'", ")") });
+                Select(p => new { data = "("+ "'" + roleDocument.roleId + "',"+ p.documentId+","+p.permissionType+","+p.additionalClaim+",0,'" + dateTime.ToString("yyyy-MM-dd") + "'," + CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','" + CreatedBy + "'"+ ")" });
             sb.AppendFormat(string.Join(",", tempdata) + ";");
             _masterContext.Database.ExecuteSqlRaw(sb.ToString());
             _masterContext.SaveChanges();
             return true;
         }
+        
+        public mdlReturnData SetUserMaster(ulong UserId, string NormalizedName, string UserName, string Email, string PhoneNumber, string Password, enmUserType UserType,
+            int OrgId 
+            )
+        {
+            mdlReturnData returnData = new mdlReturnData();
+            if (_masterContext.tblUsersMaster.Where(p => p.UserName == UserName && p.OrgId == OrgId && p.UserType == UserType && p.UserId != UserId).Count() > 0)
+            {
+                returnData.message = "UserName already Exists";
+                returnData.messageType = enmMessageType.Error;
+                return returnData;
+            }
+            if (_masterContext.tblUsersMaster.Where(p => p.Email == Email && p.OrgId == OrgId && p.UserType == UserType && p.UserId != UserId).Count() > 0)
+            {
+                returnData.message = "Email already Exists";
+                returnData.messageType = enmMessageType.Error;
+                return returnData;
+            }
+            var Existing = _masterContext.tblUsersMaster.Where(p => p.UserId == UserId && p.OrgId == OrgId).FirstOrDefault();
+            if (UserId > 0 && Existing == null)
+            {
+                returnData.message = "Invalid UserId";
+                returnData.messageType = enmMessageType.Error;
+                return returnData;
+            }
+            if (UserId == 0)
+            {
+                Existing = new tblUsersMaster();
+                Existing.RequiredChangePassword = true;
+            }
+            else
+            {
+                if (Existing.Email != Email)
+                    Existing.EmailConfirmed = false;
+                if (Existing.PhoneNumber != PhoneNumber)
+                    Existing.PhoneNumberConfirmed = false;
+            }
+            Existing.Password = Password;
+            Existing.NormalizedName = NormalizedName;
+            Existing.UserName = UserName;
+            Existing.Email = Email;
+            Existing.PhoneNumber = PhoneNumber;
+            Existing.UserType = UserType;
+            Existing.IsActive = true;
+            if (UserId > 0)
+            {
+                _masterContext.tblUsersMaster.Update(Existing);
+            }
+            else
+            {
+                _masterContext.tblUsersMaster.Add(Existing);
+            }
+            _masterContext.SaveChanges();
+            returnData.messageType = enmMessageType.Success;
+            returnData.ReturnId = Existing.UserId;
+            return returnData;
+        }
+
+
+
 
         #region UserRole
         public List<uint> GetUserRole(ulong UserId)
@@ -259,7 +319,6 @@ namespace projMasters
         public bool SetUserRole(mdlUserRolesWraper userRoles, ulong CreatedBy)
         {
             DateTime dateTime = DateTime.Now;
-
             _masterContext.Database.ExecuteSqlInterpolated($@"update tblUserRole set isdeleted=1,ModifiedBy={CreatedBy},ModifiedDt={dateTime.ToString("yyyy-MM-dd")} Where  UserId={userRoles.userMaster.userId} and isdeleted=0;");
             StringBuilder sb = new StringBuilder("");
             sb.Append("insert into tblUserRole(UserId,RoleId,IsDeleted,ModifiedDt,ModifiedBy,ModifiedRemarks,CreatedDt,CreatedBy) values ");
@@ -269,6 +328,21 @@ namespace projMasters
             _masterContext.Database.ExecuteSqlRaw(sb.ToString());
             _masterContext.SaveChanges();
             return true;
+        }
+
+        public bool SetUserDocument(ulong UserId, List<mdlRoleDocument> usrClaim, ulong CreatedBy)
+        {
+            DateTime dateTime = DateTime.Now;
+            _masterContext.Database.ExecuteSqlInterpolated($@"update tblUserClaim set isdeleted=1,ModifiedBy={CreatedBy},ModifiedDt={dateTime.ToString("yyyy-MM-dd")} Where  UserId={UserId} and isdeleted=0;");
+            StringBuilder sb = new StringBuilder("");
+            sb.Append("insert into tblUserClaim(UserId,DocumentMaster,DocumentType,IsDeleted,ModifiedDt,ModifiedBy,ModifiedRemarks,CreatedDt,CreatedBy) values ");
+            var tempdata = usrClaim.Where(q => q.additionalClaim > 0 || q.documentId>0).
+                Select(p => new { data = "("+UserId+ "," + p.documentId+ ","+ p.permissionType+ ",0,'" + dateTime.ToString("yyyy-MM-dd") + "'," + CreatedBy + ",'','" + dateTime.ToString("yyyy-MM-dd") + "','" + CreatedBy + "'"+ ")" });
+            sb.AppendFormat(string.Join(",", tempdata) + ";");
+            _masterContext.Database.ExecuteSqlRaw(sb.ToString());
+            _masterContext.SaveChanges();
+            return true;
+
         }
         #endregion
 
@@ -369,7 +443,6 @@ namespace projMasters
             return returnData;
         }
 
-
         public List<mdlCommonReturnuintWithParentID> GetUserLocation(bool ClearCache, ulong UserId, uint? OrgId, uint? CompanyId, uint? ZoneId)
         {
             List<mdlCommonReturnuintWithParentID> returnData = new List<mdlCommonReturnuintWithParentID>();
@@ -410,10 +483,6 @@ namespace projMasters
             }
             return returnData;
         }
-
     
-
-
-
     }
 }

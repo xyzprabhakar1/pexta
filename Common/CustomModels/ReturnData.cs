@@ -17,7 +17,7 @@ namespace Common.CustomModels
 
     public class mdlCommonReturn
     {
-        public int Id { get; set; }
+        public uint Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
