@@ -38,10 +38,10 @@ namespace projMasters.Models
         public string normalizedName { get; set; }
         public int failCount { get; set; }        
         public Error error { get; set; }
-        public int default_company { get; set; }
-        public int?[] company_list { get; set; }        
-        public string company_name { get; set; }
-        public string company_logo { get; set; }
+        //public int default_company { get; set; }
+        //public int?[] company_list { get; set; }        
+        //public string company_name { get; set; }
+        //public string company_logo { get; set; }
         public string captchaId { get; set; } = "";        
         public byte [] captchaImages { get; set; }
         public enmUserType userType { get; set; }

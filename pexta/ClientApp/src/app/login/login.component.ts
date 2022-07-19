@@ -17,14 +17,16 @@ export class LoginComponent implements OnInit {
   public loginForm !: FormGroup;
   public baseUrl: string;
   errorMessage: string = '';
+  errorFailcountMessage: string = '';
   showError: boolean;
   public isImageLoading: boolean;
   public imageData: any;
-  public imageId: string;
+  private imageId: string;
+  private orgCode: string;
    
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient,
-    @Inject('API_BASE_URL') baseUrl: string, private router: Router, private route: ActivatedRoute,
+    @Inject('API_BASE_URL') baseUrl: string, @Inject('OrgCode') OrgCode: string, private router: Router, private route: ActivatedRoute,
     private authService: AuthService, private sanitizer: DomSanitizer
   ) {
     this.baseUrl = baseUrl;
@@ -32,6 +34,7 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.isImageLoading = true;
     this.imageId = "";
+    this.orgCode = OrgCode;
   }
 
   ngOnInit(): void {
@@ -69,20 +72,33 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    
-
     const _log = { ...this.loginForm.value };
     const req: mdlLoginRequest = {
       userName: _log.userName,
-      password: _log.password
+      password: _log.password,
+      orgCode: this.orgCode,
+      captchaId: this.imageId,
+      captchaValue: _log.captcha,
+      height: 40,
+      width: 100,
+      longitude: "",
+      latitude:""
+
     };
     this.authService.doLogin(req).subscribe(res => {
-      if (res.isSuccess) {
+      if (res.messageType == enmMessageType.Success) {
         localStorage.setItem("token", res.token);
+        localStorage.setItem("userId", res.userIdHex);
+        localStorage.setItem("orgId", res.orgId.toString());
+        localStorage.setItem("normalizedName", res.normalizedName);
+        localStorage.setItem("userType", res.userType.toString());
         this.router.navigate([this.returnUrl]);
       }
       else {
         this.errorMessage = res.error.message;
+        this.errorFailcountMessage = "Login fail count " + res.failCount
+        this.imageData = this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + res.captchaImages);
+        this.imageId = res.captchaId;        
         this.showError = true;
       }
     }, err => {
