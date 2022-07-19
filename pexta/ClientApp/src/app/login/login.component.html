@@ -15,22 +15,27 @@
         </div>
         <form [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="login()">
           <!-- Username Input-->
-          <div class="form-outline mb-4">
+          <div class="form-outline mb-2">
             <label class="form-label" for="form1Example13">User name</label>
-            <input formControlName="userName" type="text" id="form1Example13" class="form-control form-control-lg" />
-            <div class="invalid-feedback">sjdkfhsjkfhd</div>
-            <span class="invalid-feedback"><em *ngIf="validateControl('userName') && hasError('userName', 'required')">Username is required</em></span>
+            <input formControlName="userName" type="text" id="form1Example13" class="form-control form-control-lg" />            
+            <span class="has-error" *ngIf="validateControl('userName')">
+            <em *ngIf="hasError('userName', 'required')">Username is required</em>
+            <em *ngIf="hasError('userName', 'maxlength')">Username must be at most 25 characters long</em>
+            <em *ngIf="hasError('userName', 'minlength')">Username must be at least 3 characters long</em></span>
           </div>
 
           <!-- Password input -->
-          <div class="form-outline mb-4 ">
+          <div class="form-outline mb-3 ">
             <label class="form-label" for="form1Example23">Password</label>
             <input formControlName="password"  type="password" id="form1Example23" class="form-control form-control-lg " />
-            <span><em *ngIf="validateControl('password') && hasError('password', 'required')">Password is required</em></span>
-
+            <span class="has-error" *ngIf="validateControl('password')">
+              <em *ngIf="hasError('password', 'required')">Password is required</em>
+              <em *ngIf="hasError('password', 'maxlength')">Psername must be at most 25 characters long</em>
+              <em *ngIf="hasError('password', 'minlength')">Password must be at least 3 characters long</em>
+            </span>
           </div>
 
-          <div class="form-outline mb-4">
+          <div class="form-outline mb-3">
             <div class="row">
               <div class="col-sm-4 text-center">
                 <img [src]="imageData"
@@ -49,10 +54,13 @@
                 <input formControlName="captcha" type="text" id="form1Example24" class="form-control form-control-lg" placeholder="Captcha" />
               </div>
             </div>
-            <span><em *ngIf="validateControl('captcha') && hasError('captcha', 'required')">Captcha is required</em></span>
+            <span class="has-error" *ngIf="validateControl('captcha')">
+              <em *ngIf="hasError('captcha', 'required')">Captcha is required</em>
+              <em *ngIf="hasError('captcha', 'pattern')">Invalid captcha</em>
+            </span>
           </div>
 
-          <div class="d-flex justify-content-around align-items-center mb-4">
+          <div class="d-flex justify-content-around align-items-center mb-2">
             <!-- Checkbox -->
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
@@ -63,7 +71,7 @@
 
           <!-- Submit button -->
           <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="!loginForm.valid">Sign in</button>
-          <div class="divider d-flex align-items-center my-4">
+          <div class="divider d-flex align-items-center my-3">
             <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
           </div>
 

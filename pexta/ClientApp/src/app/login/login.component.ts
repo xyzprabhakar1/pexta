@@ -36,9 +36,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      userName: ['', [Validators.required, Validators.maxLength(25)]],
-      password: ['', [Validators.required, Validators.maxLength(25)]],
-      captcha: ['', [Validators.required]]
+      userName: ['', [Validators.required, Validators.maxLength(25), Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.maxLength(25), Validators.minLength(3)]],
+      captcha: ['', [Validators.required, Validators.pattern("[A-Z0-9]{4}")]]
     })
     this.getCaptcha();
   }
@@ -69,6 +69,8 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    
+
     const _log = { ...this.loginForm.value };
     const req: mdlLoginRequest = {
       userName: _log.userName,
