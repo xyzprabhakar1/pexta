@@ -50,5 +50,6 @@ import { ResetPasswordComponent } from './login/reset-password.component';
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
+ 
 })
 export class AppModule { }

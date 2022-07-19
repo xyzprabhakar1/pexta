@@ -1,9 +1,11 @@
 
 using Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 //Add Db Context
 builder.Services.AddDbContext<projMasters.Database.MasterContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("PextaHrmsMsSql")));
 // Add services to the container.

@@ -4,6 +4,8 @@ import { HttpClient } from "@angular/common/http"
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from './../services/auth.service';
 import { mdlLoginRequest, mdlLoginResponse } from '../interface/auth';
+import { enmMessageType } from '../interface/enums';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -16,33 +18,37 @@ export class LoginComponent implements OnInit {
   public baseUrl: string;
   errorMessage: string = '';
   showError: boolean;
-
-  private isImageLoading: boolean;
+  public isImageLoading: boolean;
+  public imageData: any;
+  public imageId: string;
+   
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient,
     @Inject('API_BASE_URL') baseUrl: string, private router: Router, private route: ActivatedRoute,
-    private authService: AuthService, 
+    private authService: AuthService, private sanitizer: DomSanitizer
   ) {
     this.baseUrl = baseUrl;
     this.showError = false;
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.isImageLoading = true;
-    
+    this.imageId = "";
   }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      userName: ['', [Validators.required]],
-      password: ['', [Validators.required]]
+      userName: ['', [Validators.required, Validators.maxLength(25)]],
+      password: ['', [Validators.required, Validators.maxLength(25)]],
+      captcha: ['', [Validators.required]]
     })
     this.getCaptcha();
   }
 
   getCaptcha() {
     this.isImageLoading = true;
-    this.authService.getCaptcha(0, 50, 20).subscribe(res => {
+    this.authService.getCaptcha(0, 100, 40).subscribe(res => {
       if (res.messageType == enmMessageType.Success) {
-        localStorage.setItem("token", res.token);
+        this.imageData = this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + res.returnId);
+        this.imageId = res.message;        
         this.isImageLoading = false;    
       }
       else {

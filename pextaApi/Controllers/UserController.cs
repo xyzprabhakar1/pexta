@@ -17,12 +17,13 @@ namespace pextaApi.Controllers
         private readonly IConfiguration _config;
 
         public UserController(ILogger<UserController> logger, projMasters.IAuth auth, projMasters.IMasters master,
-            IConfiguration config)
+            IConfiguration config, Common.ISettings settings)
         {
             _logger = logger;
             _auth = auth;
             _master = master;
             _config = config;
+            _Settings = settings;
         }
 
         private mdlReturnData GenrateCaptcha(uint UserId, int Width, int Height)
@@ -30,7 +31,7 @@ namespace pextaApi.Controllers
             mdlReturnData mdl = new mdlReturnData() { messageType = enmMessageType.None };
             var tempData = _Settings.GenrateOTP(UserId, "LoginCaptchaExpiryTime", "Login");
             mdl.message = tempData.securityStamp;
-            if (tempData.messageType != enmMessageType.Success)
+            if (tempData.messageType == enmMessageType.Success)
             {
                 mdl.ReturnId = _Settings.GenerateImage(Width, Height, tempData.otp);
                 mdl.messageType = enmMessageType.Success;
