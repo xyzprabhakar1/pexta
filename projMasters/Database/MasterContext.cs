@@ -15,5 +15,12 @@ namespace projMasters.Database
         public MasterContext(DbContextOptions<MasterContext> options) :base(options)
         { 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            DefaultData.InsertCountryMaster(modelBuilder);
+            DefaultData.InsertOrganisation(modelBuilder);
+            DefaultData.InsertRoleMaster(modelBuilder);
+            DefaultData.InsertDefaultUser(modelBuilder);            
+        }
     }
 }

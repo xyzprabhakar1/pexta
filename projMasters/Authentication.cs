@@ -136,9 +136,11 @@ namespace projMasters
 
         public void SaveLoginLog(uint UserId, string IPAddress, string DeviceDetails, bool LoginStatus, string FromLocation, string Longitude, string Latitude)
         {
+            
+           
             _masterContext.tblUserLoginLog.Add(new Common.Database.tblUserLoginLog()
             {
-                UserId = UserId,
+                UserId = UserId==0?null: UserId,
                 IPAddress = IPAddress,
                 DeviceDetails = DeviceDetails,
                 LoginStatus = LoginStatus,

@@ -67,6 +67,7 @@ namespace Common.Enums
     }
     public enum enmDocumentMaster
     {
+        None=0,
         [Document(EnmSubModule : enmSubModule.Organisation , DocumentType: enmDocumentType.DetailView | enmDocumentType.Update | enmDocumentType.Report | enmDocumentType.DisplayMenu | enmDocumentType.PendingReport | enmDocumentType.Approval,
             DisplayOrder: 1, Name: "Organisation", Description: "Dashboard the Orgasnisation Details", Icon: "far fa-circle nav-icon", RouterUrl : "Organisation")]
         Organisation = 2,
