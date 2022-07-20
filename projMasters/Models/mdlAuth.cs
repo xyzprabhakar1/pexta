@@ -16,6 +16,7 @@ namespace projMasters.Models
         public string userName { get; set; }
         [Required]
         public string password { get; set; }
+        [Required]
         public string orgCode { get; set; }
         public uint orgId { get; set; }
         [Required]

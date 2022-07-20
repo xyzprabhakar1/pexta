@@ -59,9 +59,17 @@ namespace pextaApi.Controllers
             {
                 res.messageType = enmMessageType.Error;
                 res.error = new Error() { ErrorId = enmError.InvalidData };
-                res.error.Message = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+                res.error.Message = res.error.Message+" "+ string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
                 return Ok(res);
             }
+            res.orgId=_master.GetOrgId(mdl.orgCode);
+            if (res.orgId == 0)
+            {
+                res.messageType = enmMessageType.Error;
+                res.error = new Error() { ErrorId = enmError.InvalidOrganization };                
+                return Ok(res);
+            }
+
             var IsValid=_Settings.ValidateCaptcha(mdl.userId, mdl.captchaValue, mdl.captchaId);
             if (IsValid.messageType!=enmMessageType.Success)
             {

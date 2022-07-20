@@ -23,6 +23,7 @@ namespace projMasters
         List<mdlCommonReturn> GetStates(int CountryId);
         List<mdlCommonReturn> GetStates(uint[] StateId);
         string SetImage(IFormFile fromFile, enmFileType mimeType, uint userId);
+        uint GetOrgId(string OrgCode);
     }
 
     public class Masters : IMasters
@@ -40,6 +41,11 @@ namespace projMasters
             }
             return _masterContext.tblState.Where(q => q.StateId == StateId).Select(p => new mdlCommonReturn()
             { Id = p.StateId, Code = p.Code, Name = p.Name }).FirstOrDefault();
+        }
+
+        public uint GetOrgId(string OrgCode)
+        {
+            return _masterContext.tblOrganisation.Where(p => p.Code == OrgCode).FirstOrDefault()?.OrgId ?? 0;
         }
 
 
