@@ -50,16 +50,17 @@ namespace pextaApi.Controllers
         {
             return Ok( GenrateCaptcha(UserId, Width, Height));
         }
-
-
         [HttpPost]
-        [Route("login")]        
+        [Route("login")]
         public IActionResult login(mdlLoginRequest mdl)
         {
             mdlLoginResponse res = new mdlLoginResponse();
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                res.messageType = enmMessageType.Error;
+                res.error = new Error() { ErrorId = enmError.InvalidData };
+                res.error.Message = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+                return Ok(res);
             }
             var IsValid=_Settings.ValidateCaptcha(mdl.userId, mdl.captchaValue, mdl.captchaId);
             if (IsValid.messageType!=enmMessageType.Success)

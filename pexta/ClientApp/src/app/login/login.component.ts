@@ -105,8 +105,5 @@ export class LoginComponent implements OnInit {
       this.errorMessage = err.message;
       this.showError = true;
     });
-    
-    
   }
-
 }
