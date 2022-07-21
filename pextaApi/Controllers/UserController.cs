@@ -92,5 +92,11 @@ namespace pextaApi.Controllers
             res.token= token;
             return Ok( res);
         }
+
+        [HttpPost]
+        public IActionResult UserOrgPermission(uint userId)
+        {   
+            return Ok("");
+        }
     }
 }

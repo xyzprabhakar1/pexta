@@ -11,7 +11,7 @@ export function getApiBaseUrl() {
   return "https://localhost:7014/";
 }
 export function getOrgCode() {
-  return "PEXTA";
+  return "GL";
 }
 
 const providers = [
