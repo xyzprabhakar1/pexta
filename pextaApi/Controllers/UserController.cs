@@ -93,8 +93,10 @@ namespace pextaApi.Controllers
             return Ok( res);
         }
 
+
         [HttpPost]
-        public IActionResult UserOrgPermission(uint userId)
+        [Route("UserOrgPermission")]
+        public IActionResult UserOrgPermission()
         {   
             return Ok("");
         }
