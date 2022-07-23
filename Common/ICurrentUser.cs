@@ -10,10 +10,10 @@ namespace Common
     public interface ICurrentUser
     {
         int CustomerId { get; }
-        ulong DistributorId { get; }
+        uint DistributorId { get; }
         int EmployeeId { get; }
-        int OrgId { get; }
-        ulong UserId { get; }
+        uint OrgId { get; }
+        uint UserId { get; }
         enmUserType UserType { get; }
         int VendorId { get; }
     }

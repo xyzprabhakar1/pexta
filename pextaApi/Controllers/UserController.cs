@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Common.Enums;
 using projMasters.Models;
+using Microsoft.AspNetCore.Authorization;
+using Common;
 
 namespace pextaApi.Controllers
 {
@@ -15,15 +17,17 @@ namespace pextaApi.Controllers
         private readonly projMasters.IMasters _master;
         private readonly Common.ISettings _Settings;
         private readonly IConfiguration _config;
+        private readonly ICurrentUser _currentUser;
 
         public UserController(ILogger<UserController> logger, projMasters.IAuth auth, projMasters.IMasters master,
-            IConfiguration config, Common.ISettings settings)
+            IConfiguration config, Common.ISettings settings, ICurrentUser currentUser)
         {
             _logger = logger;
             _auth = auth;
             _master = master;
             _config = config;
             _Settings = settings;
+            _currentUser=currentUser;
         }
 
         private mdlReturnData GenrateCaptcha(uint UserId, int Width, int Height)
@@ -94,11 +98,81 @@ namespace pextaApi.Controllers
         }
 
 
-        [HttpPost]
-        [Route("UserOrgPermission")]
-        public IActionResult UserOrgPermission()
-        {   
-            return Ok("");
+        [HttpGet]
+        [Route("GetUserLocation/{ClearCache}")]
+        [Route("GetUserLocation/{ClearCache}/{UserId}")]        
+        [Route("GetUserLocation/{ClearCache}/{UserId}/{CompanyId}")]
+        [Route("GetUserLocation/{ClearCache}/{UserId}/{CompanyId}/{ZoneId}")]
+        [Authorize]
+        public IActionResult GetUserLocation(bool ClearCache, uint? UserId=null,  uint? CompanyId = null, uint? ZoneId = null)
+        {
+            if (UserId == null)
+            {
+                UserId = _currentUser.UserId;
+            }            
+            return Ok(_auth.GetUserLocation(ClearCache, UserId.Value, _currentUser.OrgId, CompanyId, ZoneId));
         }
+
+        [HttpGet]
+        [Route("GetUserZone")]
+        [Route("GetUserZone/{UserId}")]        
+        [Route("GetUserZone/{UserId}/{CompanyId}")]        
+        [Authorize]
+        public IActionResult GetUserZone( uint? UserId = null,  uint? CompanyId = null)
+        {
+            if (UserId == null)
+            {
+                UserId = _currentUser.UserId;
+            }            
+            return Ok(_auth.GetUserZone(UserId.Value, _currentUser.OrgId, CompanyId, new List<uint>()));
+        }
+
+        [HttpGet]
+        [Route("GetUserCompany")]
+        [Route("GetUserCompany/{UserId}")]        
+        [Authorize]
+        public IActionResult GetUserCompany(uint? UserId = null)
+        {
+            if (UserId == null)
+            {
+                UserId = _currentUser.UserId;
+            }            
+            return Ok(_auth.GetUserCompany(UserId.Value, _currentUser.OrgId, new List<uint>()));
+        }
+
+
+        [HttpGet]
+        [Route("GetUserDocuments")]
+        [Route("GetUserDocuments/{UserId}")]
+        [Authorize]
+        public IActionResult GetUserDocuments(uint? UserId = null)
+        {
+            if (UserId == null)
+            {
+                UserId = _currentUser.UserId;
+            }
+            return Ok(_auth.GetUserDocuments(UserId.Value, false));
+        }
+
+        [HttpGet]
+        [Route("GetUserAdditionClaim")]
+        [Route("GetUserAdditionClaim/{UserId}")]
+        [Authorize]
+        public IActionResult GetUserAdditionClaim(uint? UserId = null)
+        {
+            if (UserId == null)
+            {
+                UserId = _currentUser.UserId;
+            }
+            return Ok(_auth.GetUserAdditionClaim(UserId.Value));
+        }
+
+
+
+
+
+
+
+
     }
 }
